@@ -1,8 +1,36 @@
 import { sql } from "@pgtyped/runtime";
-import { IGetBusinessByIdQuery } from "./types/business.repository.types";
+import {
+  ICreateBusinessQuery,
+  IGetBusinessByIdQuery,
+} from "./types/business.repository.types";
+import { Pool } from "pg";
+import { Business } from "@/domain/entities/business";
 
 export class BusinessRepository {
-  save() {
-    const getBusinessById = sql`select * from business where business_id = $businessId;`;
+  db: Pool;
+
+  constructor(db: Pool) {
+    this.db = db;
+  }
+
+  async create(business: Business) {
+    const createBusiness = sql<ICreateBusinessQuery>`insert into business(name, description) values ($name, $description) returning business_id`;
+
+    const res = await createBusiness.run(
+      {
+        name: business.name,
+        description: business.description,
+      },
+      this.db,
+    );
+
+    return res[0].businessId;
+  }
+
+  async getById(businessId: number) {
+    const getBusinessById = sql<IGetBusinessByIdQuery>`select * from business where business_id = $businessId;`;
+    const res = await getBusinessById.run({ businessId }, this.db);
+
+    return new Business({ ...res[0] });
   }
 }

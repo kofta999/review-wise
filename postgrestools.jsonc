@@ -1,0 +1,25 @@
+{
+  "$schema": "https://pgtools.dev/schemas/0.3.1/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignore": []
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "db": {
+    "port": 5432,
+    "connTimeoutSecs": 10,
+    "host": "localhost",
+    "username": "test",
+    "password": "test",
+    "database": "review_wise_db"
+  }
+}

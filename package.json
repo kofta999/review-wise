@@ -8,10 +8,12 @@
     "@pgtyped/runtime": "^2.4.2",
     "@scalar/hono-api-reference": "^0.8.0",
     "hono": "^4.7.5",
+    "pg": "^8.14.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@pgtyped/cli": "^2.4.3",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.11"
   }
 }

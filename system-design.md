@@ -145,6 +145,15 @@ Ref:"business"."business_id" < "review"."business_id"
 - `/admin`
 	- `DELETE /reviews` Deletes a review
 
+## Data Flow
+1.  **Controller:** Receives raw request -> Maps to **Request DTO** -> Sends DTO to Service.
+
+2.  **Service:** Receives **Request DTO** -> Interacts with **Domain Entities** (creates, updates, retrieves via Data Access) -> May return **Domain Entities** to other services or maps to **Response DTO**.
+
+3.  **Data Access:** Receives **Domain Entities** (for persistence) -> Interacts with the database. Retrieves raw data -> Maps raw data to **Domain Entities** -> Returns **Domain Entities** to the Service.
+
+4.  **Controller:** Receives **Response DTO** from Service -> Transforms to HTTP response.
+
 ##### References
 [[TrustPilot.excalidraw|Diagrams]]
 [ERD](https://dbdiagram.io/d/67f3d63f4f7afba184a2b5b0)

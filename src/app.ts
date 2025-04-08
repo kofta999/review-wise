@@ -8,7 +8,8 @@ function bootstrap() {
 
   configureOpenAPI(app);
 
-  app.route("/business", BusinessController);
+  app.basePath("/api/v1")
+    .route("/businesses", BusinessController);
 
   app.onError((err, c) => {
     console.log(err);

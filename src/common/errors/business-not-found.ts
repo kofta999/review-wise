@@ -1,8 +1,8 @@
-import { BaseError } from "./base-error";
+import { BaseApiError } from "./base-error";
 
-export class BusinessNotFoundError extends BaseError {
+export class BusinessNotFoundError extends BaseApiError {
   constructor(businessId: number) {
-    super();
+    super(404);
     this.message = `Business of ID ${businessId} is not found`;
   }
 }

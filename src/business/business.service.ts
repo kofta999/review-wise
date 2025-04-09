@@ -3,7 +3,6 @@ import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.d
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
 import type { BusinessRepository } from "@/data-access/business.repository";
 import { Business } from "@/domain/entities/business";
-import { Props } from "hono/dist/types/jsx/base";
 
 export class BusinessService {
   private repository: BusinessRepository;
@@ -21,8 +20,10 @@ export class BusinessService {
   }
 
   async getBusinessById(businessId: number): Promise<GetBusinessDTO> {
-    const business = await this.repository.getById(businessId);
-    const ratings = await this.repository.getRatings(businessId);
+    const [business, ratings] = await Promise.all([
+      this.repository.getById(businessId),
+      this.repository.getRatings(businessId),
+    ]);
 
     return {
       businessId,

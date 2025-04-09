@@ -24,7 +24,7 @@ function injectDeps(app: AppOpenAPI) {
     .openapi(businessRoutes.register, businessController.register)
     .openapi(businessRoutes.getById, businessController.getById)
     .openapi(businessRoutes.getReviews, businessController.getReviews);
-  app.route("/business", businessRouter);
+  app.route("/businesses", businessRouter);
 }
 
 // Initializes all middlewares etc

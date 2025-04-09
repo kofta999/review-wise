@@ -1,0 +1,16 @@
+import type { ErrorHandler } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
+import { BaseApiError } from "../errors/base-error";
+
+export const errorHandler: ErrorHandler = (err, c) => {
+  let [statusCode, errorMessage]: [ContentfulStatusCode, string] = [
+    500,
+    "Internal Server Error",
+  ];
+
+  if (err instanceof BaseApiError) {
+    [statusCode, errorMessage] = [err.code, err.message];
+  }
+
+  return c.json({ message: errorMessage }, statusCode);
+};

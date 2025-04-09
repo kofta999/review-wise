@@ -5,6 +5,7 @@ import { BusinessController } from "@/presentation/controllers/business.controll
 import * as businessRoutes from "@/presentation/routes/business.routes";
 import { Pool } from "pg";
 import { BusinessService } from "./business/business.service";
+import { errorHandler } from "./common/middleware/error-handler";
 import type { AppOpenAPI } from "./common/types";
 
 function injectDeps(app: AppOpenAPI) {
@@ -37,10 +38,7 @@ function bootstrap() {
 
   injectDeps(app);
 
-  app.onError((err, c) => {
-    console.log(err);
-    return c.json("test");
-  });
+  app.onError(errorHandler);
 
   return app;
 }

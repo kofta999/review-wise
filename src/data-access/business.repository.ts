@@ -1,12 +1,12 @@
+import { Business } from "@/domain/entities/business";
 import { sql } from "@pgtyped/runtime";
-import {
+import type { Pool } from "pg";
+import type {
   ICreateBusinessQuery,
   IGetBusinessByIdQuery,
   IGetReviewsForBusinessQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
-import { Pool } from "pg";
-import { Business } from "@/domain/entities/business";
 
 export class BusinessRepository {
   db: Pool;

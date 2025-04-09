@@ -1,5 +1,5 @@
-import { RegisterBusinessDTO } from "@/common/dtos/create-business.dto";
-import { BusinessRepository } from "@/data-access/business.repository";
+import type { RegisterBusinessDTO } from "@/common/dtos/create-business.dto";
+import type { BusinessRepository } from "@/data-access/business.repository";
 import { Business } from "@/domain/entities/business";
 
 export class BusinessService {

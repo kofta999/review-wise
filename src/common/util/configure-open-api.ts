@@ -1,4 +1,4 @@
-import { AppOpenAPI } from "@/common/types";
+import type { AppOpenAPI } from "@/common/types";
 import { Scalar } from "@scalar/hono-api-reference";
 
 export default function configureOpenAPI(app: AppOpenAPI) {

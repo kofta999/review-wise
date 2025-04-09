@@ -1,5 +1,5 @@
-import { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
-import { Env } from "hono";
+import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
+import type { Env } from "hono";
 
 export interface AppBindings extends Env {
   Variables: {};

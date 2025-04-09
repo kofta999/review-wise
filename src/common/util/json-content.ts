@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 
 const jsonContent = <T extends ZodSchema>(schema: T, description: string) => {
   return {

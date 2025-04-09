@@ -1,8 +1,8 @@
-import { createRouter } from "@/common/util/create-router";
-import { register } from "../routes/business.routes";
 import { BusinessService } from "@/business/business.service";
+import { createRouter } from "@/common/util/create-router";
 import { BusinessRepository } from "@/data-access/business.repository";
 import { Client, Pool } from "pg";
+import { register } from "../routes/business.routes";
 
 const businessRepository = new BusinessRepository(
   new Pool({

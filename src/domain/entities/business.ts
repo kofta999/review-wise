@@ -1,4 +1,4 @@
-import { Review } from "./review";
+import type { Review } from "./review";
 
 export class Business {
   businessId?: number;

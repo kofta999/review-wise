@@ -1,8 +1,8 @@
+import { BusinessNotFoundError } from "@/common/exceptions/business-not-found";
 import type { Rating } from "@/common/types";
 import { Business } from "@/domain/entities/business";
 import type { Review } from "@/domain/entities/review";
-import { sql } from "@pgtyped/runtime";
-import type { Pool } from "pg";
+import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type {
   ICreateBusinessQuery,
   IGetBusinessByIdQuery,
@@ -12,9 +12,9 @@ import type {
 } from "./types/business.repository.types";
 
 export class BusinessRepository {
-  db: Pool;
+  db: IDatabaseConnection;
 
-  constructor(db: Pool) {
+  constructor(db: IDatabaseConnection) {
     this.db = db;
   }
 
@@ -45,6 +45,10 @@ export class BusinessRepository {
       where business_id = $businessId;`;
 
     const res = await getBusinessById.run({ businessId }, this.db);
+
+    if (res.length === 0) {
+      throw new BusinessNotFoundError(businessId);
+    }
 
     return new Business({ ...res[0] });
   }

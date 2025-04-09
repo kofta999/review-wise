@@ -1,15 +1,14 @@
 import type { Review } from "@/domain/entities/review";
-import { sql } from "@pgtyped/runtime";
-import type { Pool } from "pg";
+import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type {
   ICreateReviewQuery,
   IRemoveReviewQuery,
 } from "./types/review.repository.types";
 
 export class ReviewRepository {
-  db: Pool;
+  db: IDatabaseConnection;
 
-  constructor(db: Pool) {
+  constructor(db: IDatabaseConnection) {
     this.db = db;
   }
 

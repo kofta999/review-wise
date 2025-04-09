@@ -19,7 +19,7 @@ export class ReviewRepository {
 
     const res = await createReview.run({ ...review }, this.db);
 
-    return res[0].reviewId;
+    return res[0].review_id;
   }
 
   async remove(reviewId: number) {

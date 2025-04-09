@@ -8,7 +8,6 @@
   ],
   "srcDir": "./src/",
   "failOnError": false,
-  "camelCaseColumnNames": true,
   "db": {
     "host": "localhost",
     "user": "test",

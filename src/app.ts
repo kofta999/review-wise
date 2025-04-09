@@ -20,11 +20,9 @@ function injectDeps(app: AppOpenAPI) {
   const businessRepository = new BusinessRepository(pool);
   const businessService = new BusinessService(businessRepository);
   const businessController = new BusinessController(businessService);
-  const businessRouter = createRouter().openapi(
-    businessRoutes.register,
-    businessController.register,
-  );
-
+  const businessRouter = createRouter()
+    .openapi(businessRoutes.register, businessController.register)
+    .openapi(businessRoutes.getById, businessController.getById);
   app.route("/business", businessRouter);
 }
 

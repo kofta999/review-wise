@@ -10,7 +10,7 @@ export interface ICreateReviewParams {
 
 /** 'CreateReview' return type */
 export interface ICreateReviewResult {
-  reviewId: number;
+  review_id: number;
 }
 
 /** 'CreateReview' query type */

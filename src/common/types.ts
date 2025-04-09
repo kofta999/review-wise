@@ -11,3 +11,5 @@ export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
   R,
   AppBindings
 >;
+
+export type Rating = number;

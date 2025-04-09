@@ -1,9 +1,12 @@
+import type { Rating } from "@/common/types";
 import { Business } from "@/domain/entities/business";
+import type { Review } from "@/domain/entities/review";
 import { sql } from "@pgtyped/runtime";
 import type { Pool } from "pg";
 import type {
   ICreateBusinessQuery,
   IGetBusinessByIdQuery,
+  IGetRatingsForBusinessQuery,
   IGetReviewsForBusinessQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
@@ -15,7 +18,7 @@ export class BusinessRepository {
     this.db = db;
   }
 
-  async create(business: Business) {
+  async create(business: Business): Promise<number> {
     const createBusiness = sql<ICreateBusinessQuery>`insert into business(name, description) values ($name, $description) returning business_id`;
 
     const res = await createBusiness.run(
@@ -26,28 +29,41 @@ export class BusinessRepository {
       this.db,
     );
 
-    return res[0].businessId;
+    return res[0].business_id;
   }
 
-  async remove(businessId: number) {
+  async remove(businessId: number): Promise<void> {
     const removeBusiness = sql<IRemoveBusinessQuery>`delete from business where business_id = $businessId`;
 
     await removeBusiness.run({ businessId }, this.db);
   }
 
-  async getById(businessId: number) {
-    const getBusinessById = sql<IGetBusinessByIdQuery>`select * from business where business_id = $businessId;`;
+  async getById(businessId: number): Promise<Business> {
+    const getBusinessById = sql<IGetBusinessByIdQuery>`select
+      business_id as "businessId", name, description
+      from business
+      where business_id = $businessId;`;
 
     const res = await getBusinessById.run({ businessId }, this.db);
 
     return new Business({ ...res[0] });
   }
 
-  async getReviews(businessId: number) {
-    const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select * from review where business_id = $businessId`;
+  async getReviews(businessId: number): Promise<Review[]> {
+    const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select
+      review_id as reviewId, business_id as "businessId", title, rating, description, created_at as "createdAt"
+      from review where business_id = $businessId`;
 
     const res = await getReviewsForBusiness.run({ businessId }, this.db);
 
     return res;
+  }
+
+  async getRatings(businessId: number): Promise<Rating[]> {
+    const getRatingsForBusiness = sql<IGetRatingsForBusinessQuery>`select rating from review where business_id = $businessId`;
+
+    const res = await getRatingsForBusiness.run({ businessId }, this.db);
+
+    return res.map(({ rating }) => rating);
   }
 }

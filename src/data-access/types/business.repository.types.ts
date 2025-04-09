@@ -8,7 +8,7 @@ export interface ICreateBusinessParams {
 
 /** 'CreateBusiness' return type */
 export interface ICreateBusinessResult {
-  businessId: number;
+  business_id: number;
 }
 
 /** 'CreateBusiness' query type */
@@ -60,7 +60,7 @@ export interface IGetReviewsForBusinessResult {
   createdAt: Date;
   description: string;
   rating: number;
-  reviewId: number;
+  reviewid: number;
   title: string;
 }
 
@@ -68,5 +68,21 @@ export interface IGetReviewsForBusinessResult {
 export interface IGetReviewsForBusinessQuery {
   params: IGetReviewsForBusinessParams;
   result: IGetReviewsForBusinessResult;
+}
+
+/** 'GetRatingsForBusiness' parameters type */
+export interface IGetRatingsForBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'GetRatingsForBusiness' return type */
+export interface IGetRatingsForBusinessResult {
+  rating: number;
+}
+
+/** 'GetRatingsForBusiness' query type */
+export interface IGetRatingsForBusinessQuery {
+  params: IGetRatingsForBusinessParams;
+  result: IGetRatingsForBusinessResult;
 }
 

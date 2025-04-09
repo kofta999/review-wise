@@ -7,11 +7,16 @@ export class Review {
   createdAt?: Date | undefined;
 
   constructor({
+    reviewId,
     businessId,
     description,
     rating,
     title,
-  }: Pick<Review, "businessId" | "description" | "rating" | "title">) {
+  }: Pick<
+    Review,
+    "reviewId" | "businessId" | "description" | "rating" | "title"
+  >) {
+    this.reviewId = reviewId;
     this.businessId = businessId;
     this.description = description;
     this.rating = rating;

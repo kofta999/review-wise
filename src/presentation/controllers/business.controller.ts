@@ -1,6 +1,6 @@
 import type { BusinessService } from "@/business/business.service";
 import type { AppRouteHandler } from "@/common/types";
-import type { RegisterRoute } from "../routes/business.routes";
+import type { GetByIdRoute, RegisterRoute } from "../routes/business.routes";
 
 export class BusinessController {
   private businessService: BusinessService;
@@ -20,5 +20,13 @@ export class BusinessController {
       },
       201,
     );
+  };
+
+  getById: AppRouteHandler<GetByIdRoute> = async (c) => {
+    const { id } = c.req.valid("param");
+
+    const business = await this.businessService.getBusinessById(id);
+
+    return c.json(business, 200);
   };
 }

@@ -1,3 +1,4 @@
+import type { Rating } from "@/common/types";
 import type { Review } from "./review";
 
 export class Business {
@@ -5,17 +6,22 @@ export class Business {
   name: string;
   description: string;
 
-  constructor({ name, description }: Pick<Business, "name" | "description">) {
+  constructor({
+    businessId,
+    name,
+    description,
+  }: Pick<Business, "businessId" | "name" | "description">) {
+    this.businessId = businessId;
     this.name = name;
     this.description = description;
   }
 
-  calculateAverageRating(reviews: Review[]): number {
-    if (!reviews || reviews.length === 0) return 0;
+  calculateAverageRating(ratings: Rating[]): Rating {
+    if (!ratings || ratings.length === 0) return 0;
 
-    const sum = reviews.reduce((prev, curr) => prev + curr.rating, 0);
+    const sum = ratings.reduce((prev, curr) => prev + curr, 0);
 
-    return sum / reviews.length;
+    return sum / ratings.length;
   }
 
   generateSlug(): string {

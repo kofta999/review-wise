@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import { BusinessNotFoundError } from "@/common/exceptions/business-not-found";
+import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import { BusinessRepository } from "@/data-access/business.repository";
 import { Business } from "@/domain/entities/business";
 import {
@@ -128,9 +128,6 @@ describe("Business repository", () => {
     });
 
     it("Should throw error if database query fails", async () => {
-      const dbError = new Error("Database error");
-      mockDb.query.mockRejectedValueOnce(dbError);
-
       expect(repo.getById(1)).rejects.toThrow("Database error");
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });

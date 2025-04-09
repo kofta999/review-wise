@@ -1,7 +1,9 @@
 import type { RegisterBusinessDTO } from "@/common/dtos/create-business.dto";
+import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
 import type { BusinessRepository } from "@/data-access/business.repository";
 import { Business } from "@/domain/entities/business";
+import { Props } from "hono/dist/types/jsx/base";
 
 export class BusinessService {
   private repository: BusinessRepository;
@@ -22,15 +24,17 @@ export class BusinessService {
     const business = await this.repository.getById(businessId);
     const ratings = await this.repository.getRatings(businessId);
 
-    if (!business || !business.businessId) {
-      throw new Error("");
-    }
-
     return {
-      businessId: business.businessId,
+      businessId,
       name: business.name,
       description: business.description,
       averageRating: business.calculateAverageRating(ratings),
     };
+  }
+
+  async getBusinessReviews(businessId: number): Promise<GetBusinessReviewsDTO> {
+    const reviews = await this.repository.getReviews(businessId);
+
+    return reviews;
   }
 }

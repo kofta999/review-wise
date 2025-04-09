@@ -1,5 +1,4 @@
 import type { Rating } from "@/common/types";
-import type { Review } from "./review";
 
 export class Business {
   businessId?: number;

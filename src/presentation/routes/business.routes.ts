@@ -1,4 +1,5 @@
 import { RegisterBusinessSchema } from "@/common/dtos/create-business.dto";
+import { GetBusinessReviewsSchema } from "@/common/dtos/get-business-reviews.dto";
 import { GetBusinessSchema } from "@/common/dtos/get-business.dto";
 import jsonContent from "@/common/util/json-content";
 import { createRoute, z } from "@hono/zod-openapi";
@@ -48,3 +49,27 @@ export const getById = createRoute({
 });
 
 export type GetByIdRoute = typeof getById;
+
+export const getReviews = createRoute({
+  path: "/{id}/reviews",
+  method: "get",
+  tags,
+  summary: "Get Reviews",
+  request: {
+    params: z.object({
+      id: z.coerce.number().openapi({
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+        },
+        required: ["id"],
+      }),
+    }),
+  },
+  responses: {
+    200: jsonContent(GetBusinessReviewsSchema, "The business's reviews"),
+  },
+});
+
+export type GetReviewsRoute = typeof getReviews;

@@ -1,5 +1,21 @@
 /** Types generated for queries found in "src/data-access/business.repository.ts" */
 
+/** 'Exists' parameters type */
+export interface IExistsParams {
+  businessId?: number | null | void;
+}
+
+/** 'Exists' return type */
+export interface IExistsResult {
+  exists: number | null;
+}
+
+/** 'Exists' query type */
+export interface IExistsQuery {
+  params: IExistsParams;
+  result: IExistsResult;
+}
+
 /** 'CreateBusiness' parameters type */
 export interface ICreateBusinessParams {
   description?: string | null | void;

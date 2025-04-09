@@ -1,6 +1,8 @@
 import { RegisterBusinessSchema } from "@/common/dtos/create-business.dto";
 import { GetBusinessReviewsSchema } from "@/common/dtos/get-business-reviews.dto";
 import { GetBusinessSchema } from "@/common/dtos/get-business.dto";
+import { ErrorSchema } from "@/common/schemas/error-schema";
+import { IdSchema } from "@/common/schemas/id-schema";
 import jsonContent from "@/common/util/json-content";
 import { createRoute, z } from "@hono/zod-openapi";
 
@@ -32,19 +34,11 @@ export const getById = createRoute({
   tags,
   summary: "Get by Id",
   request: {
-    params: z.object({
-      id: z.coerce.number().openapi({
-        param: {
-          name: "id",
-          in: "path",
-          required: true,
-        },
-        required: ["id"],
-      }),
-    }),
+    params: IdSchema,
   },
   responses: {
     200: jsonContent(GetBusinessSchema, "The business's details"),
+    404: jsonContent(ErrorSchema, "Business not found"),
   },
 });
 
@@ -56,19 +50,11 @@ export const getReviews = createRoute({
   tags,
   summary: "Get Reviews",
   request: {
-    params: z.object({
-      id: z.coerce.number().openapi({
-        param: {
-          name: "id",
-          in: "path",
-          required: true,
-        },
-        required: ["id"],
-      }),
-    }),
+    params: IdSchema,
   },
   responses: {
     200: jsonContent(GetBusinessReviewsSchema, "The business's reviews"),
+    404: jsonContent(ErrorSchema, "Business not found"),
   },
 });
 

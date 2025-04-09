@@ -59,6 +59,8 @@ Tags: #projects
 ## Technical Requirements
 * **Caching:** Cache frequently accessed business profiles, aggregated ratings, and potentially lists of recent reviews.
 
+- **Error Handling:** Should handle all errors accordingly, in services and routes.
+
 * **Logging:** Log API requests, review submissions, moderation actions, and errors.
 
 * **JWT / OAuth:** Implement authentication for businesses to manage their profiles and potentially for users to submit reviews (to prevent anonymous spam, though Trustpilot allows some anonymous reviews). OAuth could be used for social login for reviewers.

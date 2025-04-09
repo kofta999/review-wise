@@ -17,6 +17,20 @@ export interface ICreateBusinessQuery {
   result: ICreateBusinessResult;
 }
 
+/** 'RemoveBusiness' parameters type */
+export interface IRemoveBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'RemoveBusiness' return type */
+export type IRemoveBusinessResult = void;
+
+/** 'RemoveBusiness' query type */
+export interface IRemoveBusinessQuery {
+  params: IRemoveBusinessParams;
+  result: IRemoveBusinessResult;
+}
+
 /** 'GetBusinessById' parameters type */
 export interface IGetBusinessByIdParams {
   businessId?: number | null | void;
@@ -33,5 +47,26 @@ export interface IGetBusinessByIdResult {
 export interface IGetBusinessByIdQuery {
   params: IGetBusinessByIdParams;
   result: IGetBusinessByIdResult;
+}
+
+/** 'GetReviewsForBusiness' parameters type */
+export interface IGetReviewsForBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'GetReviewsForBusiness' return type */
+export interface IGetReviewsForBusinessResult {
+  businessId: number;
+  createdAt: Date;
+  description: string;
+  rating: number;
+  reviewId: number;
+  title: string;
+}
+
+/** 'GetReviewsForBusiness' query type */
+export interface IGetReviewsForBusinessQuery {
+  params: IGetReviewsForBusinessParams;
+  result: IGetReviewsForBusinessResult;
 }
 

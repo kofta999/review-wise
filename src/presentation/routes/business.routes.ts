@@ -18,3 +18,5 @@ export const register = createRoute({
     ),
   },
 });
+
+export type RegisterRoute = typeof register;

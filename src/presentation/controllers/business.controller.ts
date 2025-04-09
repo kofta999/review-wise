@@ -1,26 +1,18 @@
-import { BusinessService } from "@/business/business.service";
-import { createRouter } from "@/common/util/create-router";
-import { BusinessRepository } from "@/data-access/business.repository";
-import { Client, Pool } from "pg";
-import { register } from "../routes/business.routes";
+import type { BusinessService } from "@/business/business.service";
+import type { AppRouteHandler } from "@/common/types";
+import type { RegisterRoute } from "../routes/business.routes";
 
-const businessRepository = new BusinessRepository(
-  new Pool({
-    port: 5432,
-    host: "localhost",
-    user: "test",
-    password: "test",
-    database: "review_wise_db",
-  }),
-);
-const businessService = new BusinessService(businessRepository);
+export class BusinessController {
+  private businessService: BusinessService;
 
-export const BusinessController = createRouter().openapi(
-  register,
-  async (c) => {
+  constructor(businessService: BusinessService) {
+    this.businessService = businessService;
+  }
+
+  register: AppRouteHandler<RegisterRoute> = async (c) => {
     const body = c.req.valid("json");
 
-    const businessId = await businessService.registerBusiness(body);
+    const businessId = await this.businessService.registerBusiness(body);
 
     return c.json(
       {
@@ -28,5 +20,5 @@ export const BusinessController = createRouter().openapi(
       },
       201,
     );
-  },
-);
+  };
+}

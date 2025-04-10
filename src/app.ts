@@ -5,9 +5,11 @@ import { BusinessController } from "@/presentation/controllers/business.controll
 import * as businessRoutes from "@/presentation/routes/business.routes";
 import { Pool } from "pg";
 import { BusinessService } from "./business/business.service";
+import { ReviewService } from "./business/review.service";
 import { errorHandler } from "./common/middleware/error-handler";
 import { loggerMiddleware } from "./common/middleware/pino-logger";
 import type { AppOpenAPI } from "./common/types";
+import { ReviewRepository } from "./data-access/review.repository";
 
 function injectDeps(app: AppOpenAPI) {
   const pool = new Pool({
@@ -18,14 +20,29 @@ function injectDeps(app: AppOpenAPI) {
     database: "review_wise_db",
   });
 
-  // Business
+  // Repositories
   const businessRepository = new BusinessRepository(pool);
-  const businessService = new BusinessService(businessRepository);
-  const businessController = new BusinessController(businessService);
+  const reviewRepository = new ReviewRepository(pool);
+
+  // Services
+  const businessService = new BusinessService(
+    businessRepository,
+    reviewRepository,
+  );
+  const reviewService = new ReviewService(reviewRepository);
+
+  // Controllers
+  const businessController = new BusinessController(
+    businessService,
+    reviewService,
+  );
+
+  // Routers
   const businessRouter = createRouter()
     .openapi(businessRoutes.register, businessController.register)
     .openapi(businessRoutes.getById, businessController.getById)
-    .openapi(businessRoutes.getReviews, businessController.getReviews);
+    .openapi(businessRoutes.getReviews, businessController.getReviews)
+    .openapi(businessRoutes.submitReview, businessController.submitReview);
   app.route("/businesses", businessRouter);
 }
 

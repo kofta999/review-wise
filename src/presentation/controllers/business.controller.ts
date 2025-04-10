@@ -1,10 +1,12 @@
 import type { IBusinessService } from "@/business/interfaces/business.service.interface";
 import type { IReviewService } from "@/business/interfaces/review.service.interface";
+import { BaseApiError } from "@/common/errors/base-error";
 import type { AppRouteHandler } from "@/common/types";
 import type {
   GetByIdRoute,
   GetReviewsRoute,
   RegisterRoute,
+  SubmitReviewRoute,
 } from "../routes/business.routes";
 
 export class BusinessController {
@@ -46,5 +48,21 @@ export class BusinessController {
     const business = await this.reviewService.getReviewsForBusiness(id);
 
     return c.json(business, 200);
+  };
+
+  submitReview: AppRouteHandler<SubmitReviewRoute> = async (c) => {
+    const { id } = c.req.valid("param");
+    const body = c.req.valid("json");
+
+    if (id !== body.businessId) {
+      throw new BaseApiError(
+        400,
+        `Business ID of params ${id} does not match request body's ID ${body.businessId}`,
+      );
+    }
+
+    const reviewId = await this.reviewService.reviewBusiness(body);
+
+    return c.json({ reviewId }, 201);
   };
 }

@@ -30,6 +30,10 @@ export class ReviewRepository implements IReviewRepository {
   }
 
   async create(review: Review) {
+    if (!(await this.exists(review.businessId))) {
+      throw new BusinessNotFoundError(review.businessId);
+    }
+
     const createReview = sql<ICreateReviewQuery>`insert into review(business_id, rating, title, description)
       values ($businessId, $rating, $title, $description) returning review_id`;
 

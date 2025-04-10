@@ -1,6 +1,7 @@
 import { RegisterBusinessSchema } from "@/common/dtos/create-business.dto";
 import { GetBusinessReviewsSchema } from "@/common/dtos/get-business-reviews.dto";
 import { GetBusinessSchema } from "@/common/dtos/get-business.dto";
+import { ReviewBusinessSchema } from "@/common/dtos/review-business.dto";
 import { ErrorSchema } from "@/common/schemas/error-schema";
 import { IdSchema } from "@/common/schemas/id-schema";
 import jsonContent from "@/common/util/json-content";
@@ -59,3 +60,25 @@ export const getReviews = createRoute({
 });
 
 export type GetReviewsRoute = typeof getReviews;
+
+export const submitReview = createRoute({
+  path: "/{id}/reviews",
+  method: "post",
+  tags,
+  summary: "Submit a review",
+  request: {
+    params: IdSchema,
+    body: jsonContent(ReviewBusinessSchema, "The review body"),
+  },
+  responses: {
+    201: jsonContent(
+      z.object({
+        reviewId: z.number(),
+      }),
+      "The created review's ID",
+    ),
+    404: jsonContent(ErrorSchema, "Business not found"),
+  },
+});
+
+export type SubmitReviewRoute = typeof submitReview;

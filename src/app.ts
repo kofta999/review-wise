@@ -6,6 +6,7 @@ import * as businessRoutes from "@/presentation/routes/business.routes";
 import { Pool } from "pg";
 import { BusinessService } from "./business/business.service";
 import { errorHandler } from "./common/middleware/error-handler";
+import { loggerMiddleware } from "./common/middleware/pino-logger";
 import type { AppOpenAPI } from "./common/types";
 
 function injectDeps(app: AppOpenAPI) {
@@ -31,6 +32,7 @@ function injectDeps(app: AppOpenAPI) {
 // Initializes all middlewares etc
 function bootstrap() {
   const app = createRouter();
+  app.use(loggerMiddleware());
 
   configureOpenAPI(app);
 

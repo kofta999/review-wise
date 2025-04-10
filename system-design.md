@@ -34,11 +34,12 @@ Tags: #projects
 		- `create`
 		- `remove`
 		- `getById`
-		- `getReviews`
 	
 	- Review DAO methods
 		- `create`
 		- `remove`
+		- `getReviewsForBusiness`
+		- `getRatingsForBusiness`
 
 ## Core Features:
 1.  **Business Registration:**
@@ -140,10 +141,8 @@ Ref:"business"."business_id" < "review"."business_id"
 	- `POST /` Register a new business
 	- `GET /:id` Get a business's details
 	- `GET /:id/reviews` Get a business's reviews
-
-- `/reviews`
-	- `POST /` Create a review
-
+	- `POST /:id/reviews` Submit a review for the business
+	
 - `/admin`
 	- `DELETE /reviews` Deletes a review
 

@@ -1,22 +1,28 @@
 import type { RegisterBusinessDTO } from "@/common/dtos/create-business.dto";
-import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
 import { Logger } from "@/common/util/logger";
-import type { BusinessRepository } from "@/data-access/business.repository";
+import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
+import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
 import { Business } from "@/domain/entities/business";
+import type { IBusinessService } from "./interfaces/business.service.interface";
 
-export class BusinessService {
-  private repository: BusinessRepository;
+export class BusinessService implements IBusinessService {
+  private businessRepository: IBusinessRepository;
+  private reviewRepository: IReviewRepository;
   private logger = Logger.getLogger();
 
-  constructor(repository: BusinessRepository) {
-    this.repository = repository;
+  constructor(
+    businessRepository: IBusinessRepository,
+    reviewRepository: IReviewRepository,
+  ) {
+    this.businessRepository = businessRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   async registerBusiness(dto: RegisterBusinessDTO): Promise<number> {
     const business = new Business({ ...dto });
 
-    const res = await this.repository.create(business);
+    const res = await this.businessRepository.create(business);
 
     this.logger.info(`Business ${business.name} was registered with ID ${res}`);
 
@@ -25,8 +31,8 @@ export class BusinessService {
 
   async getBusinessById(businessId: number): Promise<GetBusinessDTO> {
     const [business, ratings] = await Promise.all([
-      this.repository.getById(businessId),
-      this.repository.getRatings(businessId),
+      this.businessRepository.getById(businessId),
+      this.reviewRepository.getRatingsForBusiness(businessId),
     ]);
 
     this.logger.info(`Retrieved details for business with ID ${businessId}`);
@@ -37,13 +43,5 @@ export class BusinessService {
       description: business.description,
       averageRating: business.calculateAverageRating(ratings),
     };
-  }
-
-  async getBusinessReviews(businessId: number): Promise<GetBusinessReviewsDTO> {
-    const reviews = await this.repository.getReviews(businessId);
-
-    this.logger.info(`Retrieved reviews for business with ID ${businessId}`);
-
-    return reviews;
   }
 }

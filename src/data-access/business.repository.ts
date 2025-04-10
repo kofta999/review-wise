@@ -3,6 +3,7 @@ import type { Rating } from "@/common/types";
 import { Business } from "@/domain/entities/business";
 import type { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
+import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
   IExistsQuery,
@@ -12,7 +13,7 @@ import type {
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
 
-export class BusinessRepository {
+export class BusinessRepository implements IBusinessRepository {
   db: IDatabaseConnection;
 
   constructor(db: IDatabaseConnection) {
@@ -60,31 +61,5 @@ export class BusinessRepository {
     }
 
     return new Business({ ...res[0] });
-  }
-
-  async getReviews(businessId: number): Promise<Review[]> {
-    if (!(await this.exists(businessId))) {
-      throw new BusinessNotFoundError(businessId);
-    }
-
-    const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select
-      review_id as reviewId, business_id as "businessId", title, rating, description, created_at as "createdAt"
-      from review where business_id = $businessId`;
-
-    const res = await getReviewsForBusiness.run({ businessId }, this.db);
-
-    return res;
-  }
-
-  async getRatings(businessId: number): Promise<Rating[]> {
-    if (!(await this.exists(businessId))) {
-      throw new BusinessNotFoundError(businessId);
-    }
-
-    const getRatingsForBusiness = sql<IGetRatingsForBusinessQuery>`select rating from review where business_id = $businessId`;
-
-    const res = await getRatingsForBusiness.run({ businessId }, this.db);
-
-    return res.map(({ rating }) => rating);
   }
 }

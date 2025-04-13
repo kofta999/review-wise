@@ -54,7 +54,7 @@ export class UserRepository implements IUserRepository {
     const res = await getUserByEmail.run({ email }, this.db);
 
     if (res.length === 0) {
-      throw new UserNotFoundError(email);
+      throw new UserNotFoundError();
     }
 
     return new User({

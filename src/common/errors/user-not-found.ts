@@ -1,10 +1,12 @@
 import { BaseApiError } from "./base-error";
 
 export class UserNotFoundError extends BaseApiError {
-  constructor(identifier: number | string) {
+  constructor(identifier?: number) {
     super(
       404,
-      `User of ${typeof identifier === "number" ? `ID ${identifier}` : "Email [REDACTED]"} is not found`,
+      typeof identifier === "number"
+        ? `User of ID ${identifier} is not found`
+        : "User not found",
     );
   }
 }

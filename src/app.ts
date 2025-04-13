@@ -2,10 +2,12 @@ import configureOpenAPI from "@/common/util/configure-open-api";
 import { createRouter } from "@/common/util/create-router";
 import { BusinessRepository } from "@/data-access/business.repository";
 import { BusinessController } from "@/presentation/controllers/business.controller";
+import * as authRoutes from "@/presentation/routes/auth.routes";
 import * as businessRoutes from "@/presentation/routes/business.routes";
 import { Pool } from "pg";
 import { BunPasswordService } from "./business/bun-password.service";
 import { BusinessService } from "./business/business.service";
+import { HonoJwtService } from "./business/hono-jwt.service";
 import { ReviewService } from "./business/review.service";
 import { UserService } from "./business/user.service";
 import { errorHandler } from "./common/middleware/error-handler";
@@ -13,6 +15,7 @@ import { loggerMiddleware } from "./common/middleware/pino-logger";
 import type { AppOpenAPI } from "./common/types";
 import { ReviewRepository } from "./data-access/review.repository";
 import { UserRepository } from "./data-access/user.repository";
+import { AuthController } from "./presentation/controllers/auth.controller";
 
 function injectDeps(app: AppOpenAPI) {
   const pool = new Pool({
@@ -30,12 +33,17 @@ function injectDeps(app: AppOpenAPI) {
 
   // Services
   const passwordService = new BunPasswordService();
+  const jwtService = new HonoJwtService("TEST DONT USE IN PROD");
   const businessService = new BusinessService(
     businessRepository,
     reviewRepository,
   );
   const reviewService = new ReviewService(reviewRepository);
-  const userService = new UserService(userRepository, passwordService);
+  const userService = new UserService(
+    userRepository,
+    passwordService,
+    jwtService,
+  );
 
   // Controllers
   const businessController = new BusinessController(
@@ -43,15 +51,23 @@ function injectDeps(app: AppOpenAPI) {
     reviewService,
     userService,
   );
+  const authController = new AuthController(userService);
 
   // Routers
   const businessRouter = createRouter()
-    .basePath("/api/v1")
     .openapi(businessRoutes.register, businessController.register)
     .openapi(businessRoutes.getById, businessController.getById)
     .openapi(businessRoutes.getReviews, businessController.getReviews)
     .openapi(businessRoutes.submitReview, businessController.submitReview);
-  app.route("/businesses", businessRouter);
+
+  const authRouter = createRouter().openapi(
+    authRoutes.login,
+    authController.login,
+  );
+
+  app
+    .route("/api/v1/businesses", businessRouter)
+    .route("/api/v1/auth", authRouter);
 }
 
 // Initializes all middlewares etc

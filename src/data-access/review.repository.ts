@@ -3,13 +3,11 @@ import type { Rating } from "@/common/types";
 import type { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IReviewRepository } from "./interfaces/review.repository.interface";
-import type {
-  IExistsQuery,
-  IGetRatingsForBusinessQuery,
-  IGetReviewsForBusinessQuery,
-} from "./types/business.repository.types";
+import type { IExistsQuery } from "./types/business.repository.types";
 import type {
   ICreateReviewQuery,
+  IGetRatingsForBusinessQuery,
+  IGetReviewsForBusinessQuery,
   IRemoveReviewQuery,
 } from "./types/review.repository.types";
 

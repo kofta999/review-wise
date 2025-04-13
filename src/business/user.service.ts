@@ -1,5 +1,6 @@
 import type { LoginUserDTO } from "@/common/dtos/login-user.dto";
 import { InvalidCredentialsError } from "@/common/errors/invalid-credentials";
+import { ResourceAlreadyExists } from "@/common/errors/resource-already-exists";
 import { Logger } from "@/common/util/logger";
 import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
 import { User } from "@/domain/entities/user";
@@ -26,6 +27,12 @@ export class UserService implements IUserService {
   async registerUser(
     newUser: Pick<User, "email" | "password" | "role">,
   ): Promise<number> {
+    const maybeUser = await this.userRepository.getByEmail(newUser.email);
+
+    if (maybeUser) {
+      throw new ResourceAlreadyExists("User");
+    }
+
     const hashedPassword = await this.passwordService.hashPassword(
       newUser.password,
     );

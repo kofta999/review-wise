@@ -1,5 +1,5 @@
-import type { RegisterBusinessDTO } from "@/common/dtos/create-business.dto";
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
+import type { RegisterBusinessDTO } from "@/common/dtos/register-business.dto";
 import { Logger } from "@/common/util/logger";
 import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
 import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
@@ -19,8 +19,10 @@ export class BusinessService implements IBusinessService {
     this.reviewRepository = reviewRepository;
   }
 
-  async registerBusiness(dto: RegisterBusinessDTO): Promise<number> {
-    const business = new Business({ ...dto });
+  async registerBusiness(
+    newBusiness: Pick<Business, "name" | "description" | "userId">,
+  ): Promise<number> {
+    const business = new Business({ ...newBusiness });
 
     const res = await this.businessRepository.create(business);
 

@@ -1,15 +1,15 @@
 import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { ReviewBusinessDTO } from "@/common/dtos/review-business.dto";
 import { Logger } from "@/common/util/logger";
-import type { ReviewRepository } from "@/data-access/review.repository";
+import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
 import { Review } from "@/domain/entities/review";
 import type { IReviewService } from "./interfaces/review.service.interface";
 
 export class ReviewService implements IReviewService {
-  private reviewRepository: ReviewRepository;
+  private reviewRepository: IReviewRepository;
   private logger = Logger.getLogger();
 
-  constructor(reviewRepository: ReviewRepository) {
+  constructor(reviewRepository: IReviewRepository) {
     this.reviewRepository = reviewRepository;
   }
 
@@ -18,9 +18,7 @@ export class ReviewService implements IReviewService {
 
     const res = await this.reviewRepository.create(review);
 
-    this.logger.info(
-      `Created Review ${review.title} with ID ${review.reviewId}`,
-    );
+    this.logger.info(`Created Review ${review.title} with ID ${res}`);
 
     return res;
   }

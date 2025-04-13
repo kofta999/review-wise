@@ -20,6 +20,7 @@ export interface IExistsQuery {
 export interface ICreateBusinessParams {
   description?: string | null | void;
   name?: string | null | void;
+  userId?: number | null | void;
 }
 
 /** 'CreateBusiness' return type */
@@ -57,6 +58,7 @@ export interface IGetBusinessByIdResult {
   businessId: number;
   description: string;
   name: string;
+  userId: number;
 }
 
 /** 'GetBusinessById' query type */

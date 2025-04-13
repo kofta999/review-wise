@@ -2,6 +2,7 @@ import type { Rating } from "@/common/types";
 
 export class Business {
   businessId?: number;
+  userId: number;
   name: string;
   description: string;
 
@@ -9,8 +10,10 @@ export class Business {
     businessId,
     name,
     description,
-  }: Pick<Business, "businessId" | "name" | "description">) {
+    userId,
+  }: Pick<Business, "businessId" | "name" | "description" | "userId">) {
     this.businessId = businessId;
+    this.userId = userId;
     this.name = name;
     this.description = description;
   }

@@ -16,7 +16,7 @@ Tags: #projects
 	- Admin Service
 		- `removeBusiness`
 		- `removeReview`
-	- Auth Service
+	- User Service
 		- `registerUser`
 		- `loginUser`
 
@@ -28,6 +28,11 @@ Tags: #projects
 			- `generateSlug`
 	
 	- Review Entity
+		- Attributes similar to its table
+		- Additional Methods
+			- will be decided later
+	
+	- User Entity
 		- Attributes similar to its table
 		- Additional Methods
 			- will be decided later

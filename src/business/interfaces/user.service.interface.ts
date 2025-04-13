@@ -5,5 +5,5 @@ export interface IUserService {
   registerUser(
     newUser: Pick<User, "email" | "password" | "role">,
   ): Promise<number>;
-  loginUser(dto: LoginUserDTO): Promise<void>;
+  loginUser(dto: LoginUserDTO): Promise<string>;
 }

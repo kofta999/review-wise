@@ -19,13 +19,13 @@ export interface ICreateUserQuery {
   result: ICreateUserResult;
 }
 
-/** 'GetUser' parameters type */
-export interface IGetUserParams {
+/** 'GetUserById' parameters type */
+export interface IGetUserByIdParams {
   userId?: number | null | void;
 }
 
-/** 'GetUser' return type */
-export interface IGetUserResult {
+/** 'GetUserById' return type */
+export interface IGetUserByIdResult {
   created_at: Date;
   email: string;
   password: string;
@@ -33,9 +33,29 @@ export interface IGetUserResult {
   user_id: number;
 }
 
-/** 'GetUser' query type */
-export interface IGetUserQuery {
-  params: IGetUserParams;
-  result: IGetUserResult;
+/** 'GetUserById' query type */
+export interface IGetUserByIdQuery {
+  params: IGetUserByIdParams;
+  result: IGetUserByIdResult;
+}
+
+/** 'GetUserByEmail' parameters type */
+export interface IGetUserByEmailParams {
+  email?: string | null | void;
+}
+
+/** 'GetUserByEmail' return type */
+export interface IGetUserByEmailResult {
+  created_at: Date;
+  email: string;
+  password: string;
+  role: userrole;
+  user_id: number;
+}
+
+/** 'GetUserByEmail' query type */
+export interface IGetUserByEmailQuery {
+  params: IGetUserByEmailParams;
+  result: IGetUserByEmailResult;
 }
 

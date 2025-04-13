@@ -166,6 +166,9 @@ Ref:"business"."business_id" < "review"."business_id"
 	
 - `/admin`
 	- `DELETE /reviews` Deletes a review
+	
+- `/auth`
+	- `POST /login` Logins a user (reviewer / business)
 
 ## Data Flow
 1.  **Controller:** Receives raw request -> Maps to **Request DTO** -> Sends DTO to Service.

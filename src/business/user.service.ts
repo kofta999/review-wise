@@ -1,21 +1,26 @@
 import type { LoginUserDTO } from "@/common/dtos/login-user.dto";
+import { InvalidCredentialsError } from "@/common/errors/invalid-credentials";
 import { Logger } from "@/common/util/logger";
 import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
 import { User } from "@/domain/entities/user";
+import type { IJwtService } from "./interfaces/jwt.service.interface";
 import type { IPasswordService } from "./interfaces/password.service.interface";
 import type { IUserService } from "./interfaces/user.service.interface";
 
 export class UserService implements IUserService {
   private userRepository: IUserRepository;
   private passwordService: IPasswordService;
+  private jwtService: IJwtService;
   private logger = Logger.getLogger();
 
   constructor(
     userRepository: IUserRepository,
     passwordService: IPasswordService,
+    jwtService: IJwtService,
   ) {
     this.userRepository = userRepository;
     this.passwordService = passwordService;
+    this.jwtService = jwtService;
   }
 
   async registerUser(
@@ -38,7 +43,23 @@ export class UserService implements IUserService {
     return res;
   }
 
-  loginUser(dto: LoginUserDTO): Promise<void> {
-    throw new Error("Method not implemented.");
+  async loginUser(dto: LoginUserDTO): Promise<string> {
+    const user = await this.userRepository.getByEmail(dto.email);
+
+    const isPasswordValid = await this.passwordService.comparePassword(
+      dto.password,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new InvalidCredentialsError();
+    }
+
+    const token = await this.jwtService.sign({
+      email: user.email,
+      userId: user.userId,
+    });
+
+    return token;
   }
 }

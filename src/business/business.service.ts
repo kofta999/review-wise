@@ -1,5 +1,4 @@
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
-import type { RegisterBusinessDTO } from "@/common/dtos/register-business.dto";
 import { Logger } from "@/common/util/logger";
 import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
 import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";

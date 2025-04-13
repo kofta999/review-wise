@@ -16,6 +16,9 @@ Tags: #projects
 	- Admin Service
 		- `removeBusiness`
 		- `removeReview`
+	- User Service
+		- `registerUser`
+		- `loginUser`
 
 - **Domain**
 	- Business Entity
@@ -25,6 +28,11 @@ Tags: #projects
 			- `generateSlug`
 	
 	- Review Entity
+		- Attributes similar to its table
+		- Additional Methods
+			- will be decided later
+	
+	- User Entity
 		- Attributes similar to its table
 		- Additional Methods
 			- will be decided later
@@ -40,6 +48,10 @@ Tags: #projects
 		- `remove`
 		- `getReviewsForBusiness`
 		- `getRatingsForBusiness`
+	
+	- User DAO methods
+		- `create`
+		- `getById`
 
 ## Core Features:
 1.  **Business Registration:**
@@ -110,27 +122,36 @@ Tags: #projects
 
 ## ERD
 ```
+Enum "UserRole" {
+  "BUSINESS"
+  "REVIEWER"
+  "ADMIN"
+}
+
 Table "business" {
-  "business_id" serial [pk, increment]
-  "name" varchar
-  "description" varchar
-  // "avatar_url" varchar
+  "business_id" SERIAL [pk, increment]
+  "user_id" INT [not null]
+  "name" VARCHAR [not null]
+  "description" VARCHAR [not null]
 }
 
 Table "review" {
-  "review_id" serial [pk, increment]
-  "business_id" int
-  "rating" int
-  "title" varchar
-  "description" varchar
-  "created_at" timestamp
+  "review_id" SERIAL [pk, increment]
+  "business_id" INT [not null]
+  "rating" INT [not null]
+  "title" VARCHAR [not null]
+  "description" VARCHAR [not null]
+  "created_at" TIMESTAMP [not null, default: `CURRENT_TIMESTAMP`]
 }
 
-Table "admin" {
-  "admin_id" serial [pk, increment]
-  "email" varchar
-  "password" varchar
+Table "users" {
+  "user_id" SERIAL [pk, increment]
+  "email" VARCHAR [unique, not null]
+  "password" VARCHAR [not null]
+  "role" UserRole [not null]
 }
+
+Ref:"users"."user_id" < "business"."user_id"
 
 Ref:"business"."business_id" < "review"."business_id"
 ```
@@ -145,6 +166,9 @@ Ref:"business"."business_id" < "review"."business_id"
 	
 - `/admin`
 	- `DELETE /reviews` Deletes a review
+	
+- `/auth`
+	- `POST /login` Logins a user (reviewer / business)
 
 ## Data Flow
 1.  **Controller:** Receives raw request -> Maps to **Request DTO** -> Sends DTO to Service.

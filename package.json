@@ -1,7 +1,8 @@
 {
 	"name": "review-wise",
 	"scripts": {
-		"dev": "bun ./devScript.js | pino-pretty"
+		"dev": "bun ./devScript.js | pino-pretty",
+		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json"
 	},
 	"dependencies": {
 		"@hono/zod-openapi": "0.19.2",
@@ -11,7 +12,7 @@
 		"hono-pino": "^0.8.0",
 		"pg": "^8.14.1",
 		"pino": "^9.6.0",
-		"zod": "^3.24.2"
+		"zod": "^4.0.0-beta.20250412T085909"
 	},
 	"devDependencies": {
 		"@pgtyped/cli": "^2.4.3",

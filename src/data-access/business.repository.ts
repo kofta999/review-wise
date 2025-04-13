@@ -1,15 +1,11 @@
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
-import type { Rating } from "@/common/types";
 import { Business } from "@/domain/entities/business";
-import type { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
   IExistsQuery,
   IGetBusinessByIdQuery,
-  IGetRatingsForBusinessQuery,
-  IGetReviewsForBusinessQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
 
@@ -29,12 +25,14 @@ export class BusinessRepository implements IBusinessRepository {
   }
 
   async create(business: Business): Promise<number> {
-    const createBusiness = sql<ICreateBusinessQuery>`insert into business(name, description) values ($name, $description) returning business_id`;
+    const createBusiness = sql<ICreateBusinessQuery>`insert into business(name, description, user_id)
+      values ($name, $description, $userId) returning business_id`;
 
     const res = await createBusiness.run(
       {
         name: business.name,
         description: business.description,
+        userId: business.userId,
       },
       this.db,
     );
@@ -50,7 +48,7 @@ export class BusinessRepository implements IBusinessRepository {
 
   async getById(businessId: number): Promise<Business> {
     const getBusinessById = sql<IGetBusinessByIdQuery>`select
-      business_id as "businessId", name, description
+      business_id as "businessId", name, description, user_id as "userId"
       from business
       where business_id = $businessId;`;
 

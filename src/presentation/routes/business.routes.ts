@@ -1,6 +1,6 @@
-import { RegisterBusinessSchema } from "@/common/dtos/create-business.dto";
 import { GetBusinessReviewsSchema } from "@/common/dtos/get-business-reviews.dto";
 import { GetBusinessSchema } from "@/common/dtos/get-business.dto";
+import { RegisterBusinessSchema } from "@/common/dtos/register-business.dto";
 import { ReviewBusinessSchema } from "@/common/dtos/review-business.dto";
 import { ErrorSchema } from "@/common/schemas/error-schema";
 import { IdSchema } from "@/common/schemas/id-schema";

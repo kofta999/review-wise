@@ -1,5 +1,21 @@
 /** Types generated for queries found in "src/data-access/review.repository.ts" */
 
+/** 'Exists' parameters type */
+export interface IExistsParams {
+  businessId?: number | null | void;
+}
+
+/** 'Exists' return type */
+export interface IExistsResult {
+  exists: number | null;
+}
+
+/** 'Exists' query type */
+export interface IExistsQuery {
+  params: IExistsParams;
+  result: IExistsResult;
+}
+
 /** 'CreateReview' parameters type */
 export interface ICreateReviewParams {
   businessId?: number | null | void;
@@ -31,5 +47,42 @@ export type IRemoveReviewResult = void;
 export interface IRemoveReviewQuery {
   params: IRemoveReviewParams;
   result: IRemoveReviewResult;
+}
+
+/** 'GetReviewsForBusiness' parameters type */
+export interface IGetReviewsForBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'GetReviewsForBusiness' return type */
+export interface IGetReviewsForBusinessResult {
+  businessId: number;
+  createdAt: Date;
+  description: string;
+  rating: number;
+  reviewid: number;
+  title: string;
+}
+
+/** 'GetReviewsForBusiness' query type */
+export interface IGetReviewsForBusinessQuery {
+  params: IGetReviewsForBusinessParams;
+  result: IGetReviewsForBusinessResult;
+}
+
+/** 'GetRatingsForBusiness' parameters type */
+export interface IGetRatingsForBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'GetRatingsForBusiness' return type */
+export interface IGetRatingsForBusinessResult {
+  rating: number;
+}
+
+/** 'GetRatingsForBusiness' query type */
+export interface IGetRatingsForBusinessQuery {
+  params: IGetRatingsForBusinessParams;
+  result: IGetRatingsForBusinessResult;
 }
 

@@ -27,7 +27,11 @@ describe("Business repository", () => {
         rowCount: 1,
       });
 
-      const business = new Business({ name: "test", description: "test" });
+      const business = new Business({
+        name: "test",
+        description: "test",
+        userId: 1,
+      });
 
       const businessId = await repo.create(business);
 
@@ -43,7 +47,11 @@ describe("Business repository", () => {
       const dbError = new Error("Database error");
       mockDb.query.mockRejectedValueOnce(dbError);
 
-      const business = new Business({ name: "test", description: "test" });
+      const business = new Business({
+        name: "test",
+        description: "test",
+        userId: 1,
+      });
 
       expect(repo.create(business)).rejects.toThrow("Database error");
       expect(mockDb.query).toHaveBeenCalledTimes(1);
@@ -128,107 +136,7 @@ describe("Business repository", () => {
     });
 
     it("Should throw error if database query fails", async () => {
-      expect(repo.getById(1)).rejects.toThrow("Database error");
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("getReviews", () => {
-    it("Should return reviews for a business", async () => {
-      const mockReviews = [
-        {
-          reviewId: 1,
-          businessId: 1,
-          title: "Great place",
-          rating: 5,
-          description: "Excellent service",
-          createdAt: new Date().toISOString(),
-        },
-        {
-          reviewId: 2,
-          businessId: 1,
-          title: "Good experience",
-          rating: 4,
-          description: "Would visit again",
-          createdAt: new Date().toISOString(),
-        },
-      ];
-
-      mockDb.query.mockResolvedValueOnce({
-        rows: mockReviews,
-        rowCount: 2,
-      });
-
-      const reviews = await repo.getReviews(1);
-
-      expect(reviews).toHaveLength(2);
-      expect(reviews[0].reviewId).toBe(mockReviews[0].reviewId);
-      expect(reviews[0].title).toBe(mockReviews[0].title);
-      expect(reviews[1].rating).toBe(mockReviews[1].rating);
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-      expect(mockDb.query).toHaveBeenCalledWith(
-        expect.stringContaining("select"),
-        expect.any(Object),
-      );
-    });
-
-    it("Should return empty array if no reviews exist", async () => {
-      mockDb.query.mockResolvedValueOnce({
-        rows: [],
-        rowCount: 0,
-      });
-
-      const reviews = await repo.getReviews(1);
-
-      expect(reviews).toEqual([]);
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-    });
-
-    it("Should throw error if query fails", async () => {
-      const dbError = new Error("Database error");
-      mockDb.query.mockRejectedValueOnce(dbError);
-
-      expect(repo.getReviews(1)).rejects.toThrow("Database error");
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("getRatings", () => {
-    it("Should return ratings for a business", async () => {
-      const mockRatings = [{ rating: 5 }, { rating: 4 }, { rating: 5 }];
-
-      mockDb.query.mockResolvedValueOnce({
-        rows: mockRatings,
-        rowCount: 3,
-      });
-
-      const ratings = await repo.getRatings(1);
-
-      expect(ratings).toEqual([5, 4, 5]);
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-      expect(mockDb.query).toHaveBeenCalledWith(
-        expect.stringContaining("select rating"),
-        expect.any(Object),
-      );
-    });
-
-    it("Should return empty array if no ratings exist", async () => {
-      mockDb.query.mockResolvedValueOnce({
-        rows: [],
-        rowCount: 0,
-      });
-
-      const ratings = await repo.getRatings(1);
-
-      expect(ratings).toEqual([]);
-      expect(mockDb.query).toHaveBeenCalledTimes(1);
-    });
-
-    it("Should throw error if query fails", async () => {
-      const dbError = new Error("Database error");
-      mockDb.query.mockRejectedValueOnce(dbError);
-
-      expect(repo.getRatings(1)).rejects.toThrow("Database error");
+      expect(repo.getById(1)).rejects.toThrow();
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
   });

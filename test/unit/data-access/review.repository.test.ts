@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+  spyOn,
+} from "bun:test";
 import { ReviewRepository } from "@/data-access/review.repository";
 import type { Review } from "@/domain/entities/review";
 import {
@@ -13,6 +21,8 @@ describe("Review repository", () => {
   beforeEach(() => {
     mockDb = createMockDatabaseConnection();
     repo = new ReviewRepository(mockDb);
+    // biome-ignore lint/suspicious/noExplicitAny: Private property
+    spyOn(repo as any, "exists").mockResolvedValue(true);
   });
 
   afterEach(() => {
@@ -118,6 +128,106 @@ describe("Review repository", () => {
       expect(repo.remove(reviewId)).rejects.toThrow("Database error");
 
       // Verify query was called
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("getReviewsForBusiness", () => {
+    it("Should return reviews for a business", async () => {
+      const mockReviews = [
+        {
+          reviewId: 1,
+          businessId: 1,
+          title: "Great place",
+          rating: 5,
+          description: "Excellent service",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          reviewId: 2,
+          businessId: 1,
+          title: "Good experience",
+          rating: 4,
+          description: "Would visit again",
+          createdAt: new Date().toISOString(),
+        },
+      ];
+
+      mockDb.query.mockResolvedValueOnce({
+        rows: mockReviews,
+        rowCount: 2,
+      });
+
+      const reviews = await repo.getReviewsForBusiness(1);
+
+      expect(reviews).toHaveLength(2);
+      expect(reviews[0].reviewId).toBe(mockReviews[0].reviewId);
+      expect(reviews[0].title).toBe(mockReviews[0].title);
+      expect(reviews[1].rating).toBe(mockReviews[1].rating);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining("select"),
+        expect.any(Object),
+      );
+    });
+
+    it("Should return empty array if no reviews exist", async () => {
+      mockDb.query.mockResolvedValueOnce({
+        rows: [],
+        rowCount: 0,
+      });
+
+      const reviews = await repo.getReviewsForBusiness(1);
+
+      expect(reviews).toEqual([]);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw error if query fails", async () => {
+      const dbError = new Error("Database error");
+      mockDb.query.mockRejectedValueOnce(dbError);
+
+      expect(repo.getReviewsForBusiness(1)).rejects.toThrow("Database error");
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("getRatingsForBusiness", () => {
+    it("Should return ratings for a business", async () => {
+      const mockRatings = [{ rating: 5 }, { rating: 4 }, { rating: 5 }];
+
+      mockDb.query.mockResolvedValueOnce({
+        rows: mockRatings,
+        rowCount: 3,
+      });
+
+      const ratings = await repo.getRatingsForBusiness(1);
+
+      expect(ratings).toEqual([5, 4, 5]);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining("select rating"),
+        expect.any(Object),
+      );
+    });
+
+    it("Should return empty array if no ratings exist", async () => {
+      mockDb.query.mockResolvedValueOnce({
+        rows: [],
+        rowCount: 0,
+      });
+
+      const ratings = await repo.getRatingsForBusiness(1);
+
+      expect(ratings).toEqual([]);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw error if query fails", async () => {
+      const dbError = new Error("Database error");
+      mockDb.query.mockRejectedValueOnce(dbError);
+
+      expect(repo.getRatingsForBusiness(1)).rejects.toThrow("Database error");
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
   });

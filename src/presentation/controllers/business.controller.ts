@@ -1,5 +1,6 @@
 import type { IBusinessService } from "@/business/interfaces/business.service.interface";
 import type { IReviewService } from "@/business/interfaces/review.service.interface";
+import type { IUserService } from "@/business/interfaces/user.service.interface";
 import { BaseApiError } from "@/common/errors/base-error";
 import type { AppRouteHandler } from "@/common/types";
 import type {
@@ -12,19 +13,32 @@ import type {
 export class BusinessController {
   private businessService: IBusinessService;
   private reviewService: IReviewService;
+  private userService: IUserService;
 
   constructor(
     businessService: IBusinessService,
     reviewService: IReviewService,
+    userService: IUserService,
   ) {
     this.businessService = businessService;
     this.reviewService = reviewService;
+    this.userService = userService;
   }
 
   register: AppRouteHandler<RegisterRoute> = async (c) => {
-    const body = c.req.valid("json");
+    const { description, email, name, password } = c.req.valid("json");
 
-    const businessId = await this.businessService.registerBusiness(body);
+    const userId = await this.userService.registerUser({
+      email,
+      password,
+      role: "BUSINESS",
+    });
+
+    const businessId = await this.businessService.registerBusiness({
+      userId,
+      name,
+      description,
+    });
 
     return c.json(
       {

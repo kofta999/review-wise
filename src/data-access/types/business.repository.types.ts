@@ -20,6 +20,7 @@ export interface IExistsQuery {
 export interface ICreateBusinessParams {
   description?: string | null | void;
   name?: string | null | void;
+  userId?: number | null | void;
 }
 
 /** 'CreateBusiness' return type */
@@ -57,48 +58,12 @@ export interface IGetBusinessByIdResult {
   businessId: number;
   description: string;
   name: string;
+  userId: number;
 }
 
 /** 'GetBusinessById' query type */
 export interface IGetBusinessByIdQuery {
   params: IGetBusinessByIdParams;
   result: IGetBusinessByIdResult;
-}
-
-/** 'GetReviewsForBusiness' parameters type */
-export interface IGetReviewsForBusinessParams {
-  businessId?: number | null | void;
-}
-
-/** 'GetReviewsForBusiness' return type */
-export interface IGetReviewsForBusinessResult {
-  businessId: number;
-  createdAt: Date;
-  description: string;
-  rating: number;
-  reviewid: number;
-  title: string;
-}
-
-/** 'GetReviewsForBusiness' query type */
-export interface IGetReviewsForBusinessQuery {
-  params: IGetReviewsForBusinessParams;
-  result: IGetReviewsForBusinessResult;
-}
-
-/** 'GetRatingsForBusiness' parameters type */
-export interface IGetRatingsForBusinessParams {
-  businessId?: number | null | void;
-}
-
-/** 'GetRatingsForBusiness' return type */
-export interface IGetRatingsForBusinessResult {
-  rating: number;
-}
-
-/** 'GetRatingsForBusiness' query type */
-export interface IGetRatingsForBusinessQuery {
-  params: IGetRatingsForBusinessParams;
-  result: IGetRatingsForBusinessResult;
 }
 

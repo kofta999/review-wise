@@ -1,5 +1,6 @@
 import type { ErrorHandler } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
+import { ZodError } from "zod";
 import { BaseApiError } from "../errors/base-error";
 
 export const errorHandler: ErrorHandler = (err, c) => {

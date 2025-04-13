@@ -1,15 +1,11 @@
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
-import type { Rating } from "@/common/types";
 import { Business } from "@/domain/entities/business";
-import type { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
   IExistsQuery,
   IGetBusinessByIdQuery,
-  IGetRatingsForBusinessQuery,
-  IGetReviewsForBusinessQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
 

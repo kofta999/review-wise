@@ -39,6 +39,7 @@ function injectDeps(app: AppOpenAPI) {
 
   // Routers
   const businessRouter = createRouter()
+    .basePath("/api/v1")
     .openapi(businessRoutes.register, businessController.register)
     .openapi(businessRoutes.getById, businessController.getById)
     .openapi(businessRoutes.getReviews, businessController.getReviews)
@@ -52,8 +53,6 @@ function bootstrap() {
   app.use(loggerMiddleware());
 
   configureOpenAPI(app);
-
-  app.basePath("/api/v1");
 
   injectDeps(app);
 

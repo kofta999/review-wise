@@ -58,8 +58,11 @@ export class BusinessController {
 
   getReviews: AppRouteHandler<GetReviewsRoute> = async (c) => {
     const { id } = c.req.valid("param");
+    const { limit, page } = c.req.valid("query");
 
-    const business = await this.reviewService.getReviewsForBusiness(id);
+    const business = await this.reviewService.getReviewsForBusiness(id, {
+      pagination: { limit, page },
+    });
 
     return c.json(business, 200);
   };

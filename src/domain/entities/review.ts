@@ -1,25 +1,26 @@
-export class Review {
-  reviewId?: number | undefined;
+export class Review<T extends undefined | never = undefined> {
+  reviewId: number | T;
   businessId: number;
   rating: number;
   title: string;
   description: string;
-  createdAt?: Date | undefined;
+  createdAt: Date | T;
 
-  constructor({
-    reviewId,
-    businessId,
-    description,
-    rating,
-    title,
-  }: Pick<
-    Review,
-    "reviewId" | "businessId" | "description" | "rating" | "title"
-  >) {
-    this.reviewId = reviewId;
-    this.businessId = businessId;
-    this.description = description;
-    this.rating = rating;
-    this.title = title;
+  constructor(data: {
+    reviewId?: number | T;
+    businessId: number;
+    description: string;
+    rating: number;
+    title: string;
+    createdAt?: Date | T;
+  }) {
+    this.businessId = data.businessId;
+    this.description = data.description;
+    this.rating = data.rating;
+    this.title = data.title;
+
+    // Type assertion here since we know what we're doing
+    this.reviewId = data.reviewId as number | T;
+    this.createdAt = data.createdAt as Date | T;
   }
 }

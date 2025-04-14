@@ -1,11 +1,12 @@
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import type { Rating } from "@/common/types";
-import type { Review } from "@/domain/entities/review";
+import { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IReviewRepository } from "./interfaces/review.repository.interface";
-import type { IExistsQuery } from "./types/business.repository.types";
 import type {
   ICreateReviewQuery,
+  IExistsQuery,
+  IGetCountForBusinessQuery,
   IGetRatingsForBusinessQuery,
   IGetReviewsForBusinessQuery,
   IRemoveReviewQuery,
@@ -46,18 +47,26 @@ export class ReviewRepository implements IReviewRepository {
     await removeReview.run({ reviewId }, this.db);
   }
 
-  async getReviewsForBusiness(businessId: number): Promise<Review[]> {
+  async getReviewsForBusiness(
+    businessId: number,
+    { limit, offset }: { limit: number; offset: number },
+  ): Promise<Review<never>[]> {
     if (!(await this.exists(businessId))) {
       throw new BusinessNotFoundError(businessId);
     }
 
     const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select
-      review_id as reviewId, business_id as "businessId", title, rating, description, created_at as "createdAt"
-      from review where business_id = $businessId`;
+      review_id as "reviewId", business_id as "businessId", title, rating, description, created_at as "createdAt"
+      from review where business_id = $businessId
+      limit $limit
+      offset $offset`;
 
-    const res = await getReviewsForBusiness.run({ businessId }, this.db);
+    const res = await getReviewsForBusiness.run(
+      { businessId, limit, offset },
+      this.db,
+    );
 
-    return res;
+    return res.map((rev) => new Review<never>(rev));
   }
 
   async getRatingsForBusiness(businessId: number): Promise<Rating[]> {
@@ -70,5 +79,18 @@ export class ReviewRepository implements IReviewRepository {
     const res = await getRatingsForBusiness.run({ businessId }, this.db);
 
     return res.map(({ rating }) => rating);
+  }
+
+  async getReviewCount(businessId: number): Promise<number> {
+    // Probably no need to check existence
+    const getCountForBusiness = sql<IGetCountForBusinessQuery>`select count(1) as count from review where business_id = $businessId`;
+
+    const res = await getCountForBusiness.run({ businessId }, this.db);
+
+    if (!res[0].count) {
+      throw new Error("Should never happen");
+    }
+
+    return Number.parseInt(res[0].count);
   }
 }

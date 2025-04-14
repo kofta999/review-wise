@@ -8,7 +8,7 @@ import {
   spyOn,
 } from "bun:test";
 import { ReviewRepository } from "@/data-access/review.repository";
-import type { Review } from "@/domain/entities/review";
+import { Review } from "@/domain/entities/review";
 import {
   type MockDatabaseConnection,
   createMockDatabaseConnection,
@@ -38,12 +38,12 @@ describe("Review repository", () => {
       });
 
       // Create a review object to pass to the repository
-      const review: Review = {
+      const review = new Review({
         businessId: 1,
         rating: 4,
         title: "Good service",
         description: "I enjoyed my visit",
-      };
+      });
 
       // Call the create method
       const reviewId = await repo.create(review);
@@ -65,12 +65,12 @@ describe("Review repository", () => {
       mockDb.query.mockRejectedValueOnce(dbError);
 
       // Create a review object
-      const review: Review = {
+      const review = new Review({
         businessId: 1,
         rating: 4,
         title: "Good service",
         description: "I enjoyed my visit",
-      };
+      });
 
       // Assert that the method throws the expected error
       expect(repo.create(review)).rejects.toThrow("Database error");
@@ -158,7 +158,10 @@ describe("Review repository", () => {
         rowCount: 2,
       });
 
-      const reviews = await repo.getReviewsForBusiness(1);
+      const reviews = await repo.getReviewsForBusiness(1, {
+        limit: 2,
+        offset: 1,
+      });
 
       expect(reviews).toHaveLength(2);
       expect(reviews[0].reviewId).toBe(mockReviews[0].reviewId);
@@ -177,7 +180,10 @@ describe("Review repository", () => {
         rowCount: 0,
       });
 
-      const reviews = await repo.getReviewsForBusiness(1);
+      const reviews = await repo.getReviewsForBusiness(1, {
+        limit: 2,
+        offset: 1,
+      });
 
       expect(reviews).toEqual([]);
       expect(mockDb.query).toHaveBeenCalledTimes(1);
@@ -187,7 +193,9 @@ describe("Review repository", () => {
       const dbError = new Error("Database error");
       mockDb.query.mockRejectedValueOnce(dbError);
 
-      expect(repo.getReviewsForBusiness(1)).rejects.toThrow("Database error");
+      expect(
+        repo.getReviewsForBusiness(1, { limit: 2, offset: 1 }),
+      ).rejects.toThrow("Database error");
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
   });

@@ -3,5 +3,8 @@ import type { ReviewBusinessDTO } from "@/common/dtos/review-business.dto";
 
 export interface IReviewService {
   reviewBusiness(dto: ReviewBusinessDTO): Promise<number>;
-  getReviewsForBusiness(businessId: number): Promise<GetBusinessReviewsDTO>;
+  getReviewsForBusiness(
+    businessId: number,
+    options: { pagination: { limit: number; page: number } },
+  ): Promise<GetBusinessReviewsDTO>;
 }

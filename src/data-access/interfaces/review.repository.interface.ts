@@ -4,6 +4,10 @@ import type { Review } from "@/domain/entities/review";
 export interface IReviewRepository {
   create(review: Review): Promise<number>;
   remove(reviewId: number): Promise<void>;
-  getReviewsForBusiness(businessId: number): Promise<Review[]>;
+  getReviewsForBusiness(
+    businessId: number,
+    pagination: { limit: number; offset: number },
+  ): Promise<Review<never>[]>;
   getRatingsForBusiness(businessId: number): Promise<Rating[]>;
+  getReviewCount(businessId: number): Promise<number>;
 }

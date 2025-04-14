@@ -52,6 +52,10 @@ export const getReviews = createRoute({
   summary: "Get Reviews",
   request: {
     params: IdSchema,
+    query: z.object({
+      page: z.coerce.number().optional().default(1),
+      limit: z.coerce.number().optional().default(5),
+    }),
   },
   responses: {
     200: jsonContent(GetBusinessReviewsSchema, "The business's reviews"),

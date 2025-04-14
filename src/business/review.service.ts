@@ -25,12 +25,32 @@ export class ReviewService implements IReviewService {
 
   async getReviewsForBusiness(
     businessId: number,
+    { pagination }: { pagination: { limit: number; page: number } },
   ): Promise<GetBusinessReviewsDTO> {
-    const reviews =
-      await this.reviewRepository.getReviewsForBusiness(businessId);
+    const reviews = await this.reviewRepository.getReviewsForBusiness(
+      businessId,
+      {
+        limit: pagination.limit,
+        offset: pagination.limit * (pagination.page - 1),
+      },
+    );
 
     this.logger.info(`Retrieved reviews for business with ID ${businessId}`);
 
-    return reviews;
+    const count = await this.reviewRepository.getReviewCount(businessId);
+    const totalPages = Math.ceil(count / pagination.limit);
+
+    this.logger.info(`Retrieved review count for business with ID ${count}`);
+
+    return {
+      data: reviews,
+      meta: {
+        currentPage: pagination.page,
+        totalPages,
+        totalItems: count,
+        hasNextPage: pagination.page < totalPages,
+        hasPreviousPage: pagination.page > 1,
+      },
+    };
   }
 }

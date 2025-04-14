@@ -1,4 +1,5 @@
 /** Types generated for queries found in "src/data-access/review.repository.ts" */
+export type NumberOrString = number | string;
 
 /** 'Exists' parameters type */
 export interface IExistsParams {
@@ -52,6 +53,8 @@ export interface IRemoveReviewQuery {
 /** 'GetReviewsForBusiness' parameters type */
 export interface IGetReviewsForBusinessParams {
   businessId?: number | null | void;
+  limit?: NumberOrString | null | void;
+  offset?: NumberOrString | null | void;
 }
 
 /** 'GetReviewsForBusiness' return type */
@@ -60,7 +63,7 @@ export interface IGetReviewsForBusinessResult {
   createdAt: Date;
   description: string;
   rating: number;
-  reviewid: number;
+  reviewId: number;
   title: string;
 }
 
@@ -84,5 +87,21 @@ export interface IGetRatingsForBusinessResult {
 export interface IGetRatingsForBusinessQuery {
   params: IGetRatingsForBusinessParams;
   result: IGetRatingsForBusinessResult;
+}
+
+/** 'GetCountForBusiness' parameters type */
+export interface IGetCountForBusinessParams {
+  businessId?: number | null | void;
+}
+
+/** 'GetCountForBusiness' return type */
+export interface IGetCountForBusinessResult {
+  count: string | null;
+}
+
+/** 'GetCountForBusiness' query type */
+export interface IGetCountForBusinessQuery {
+  params: IGetCountForBusinessParams;
+  result: IGetCountForBusinessResult;
 }
 

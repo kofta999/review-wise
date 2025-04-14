@@ -8,5 +8,6 @@ export const IdSchema = z.object({
       required: true,
     },
     required: ["id"],
+    default: 1,
   }),
 });

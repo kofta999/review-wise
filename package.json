@@ -2,7 +2,8 @@
 	"name": "review-wise",
 	"scripts": {
 		"dev": "bun ./devScript.js | pino-pretty",
-		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json"
+		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json",
+		"pgtyped": "bunx pgtyped -c pgtyped.cjs"
 	},
 	"dependencies": {
 		"@hono/zod-openapi": "0.19.2",

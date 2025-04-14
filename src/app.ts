@@ -15,15 +15,16 @@ import { loggerMiddleware } from "./common/middleware/pino-logger.middleware";
 import type { AppOpenAPI } from "./common/types";
 import { ReviewRepository } from "./data-access/review.repository";
 import { UserRepository } from "./data-access/user.repository";
+import env from "./env";
 import { AuthController } from "./presentation/controllers/auth.controller";
 
 function injectDeps(app: AppOpenAPI) {
   const pool = new Pool({
-    port: 5432,
-    host: "localhost",
-    user: "test",
-    password: "test",
-    database: "review_wise_db",
+    port: env.PG_PORT,
+    host: env.PG_HOST,
+    user: env.PG_USER,
+    password: env.PG_PASSWORD,
+    database: env.PG_DB_NAME,
   });
 
   // Repositories
@@ -33,7 +34,7 @@ function injectDeps(app: AppOpenAPI) {
 
   // Services
   const passwordService = new BunPasswordService();
-  const jwtService = new HonoJwtService("TEST DONT USE IN PROD");
+  const jwtService = new HonoJwtService(env.JWT_SECRET);
   const businessService = new BusinessService(
     businessRepository,
     reviewRepository,

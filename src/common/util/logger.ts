@@ -1,3 +1,4 @@
+import env from "@/env";
 import pino, { type Logger as PinoLogger } from "pino";
 
 export class Logger {
@@ -14,7 +15,7 @@ export class Logger {
     if (!Logger.instance) {
       Logger.instance = pino({
         // Any configuration options can go here
-        // level: process.env.LOG_LEVEL || 'info',
+        level: env.LOG_LEVEL,
         // formatters: {...},
         // redact: [...],
       });

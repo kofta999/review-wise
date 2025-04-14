@@ -4,6 +4,7 @@ import { BusinessRepository } from "@/data-access/business.repository";
 import { BusinessController } from "@/presentation/controllers/business.controller";
 import * as authRoutes from "@/presentation/routes/auth.routes";
 import * as businessRoutes from "@/presentation/routes/business.routes";
+import { rateLimiter } from "hono-rate-limiter";
 import { Pool } from "pg";
 import { BunPasswordService } from "./business/bun-password.service";
 import { BusinessService } from "./business/business.service";

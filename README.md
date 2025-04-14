@@ -212,10 +212,11 @@ Table: review                                                                  â
 2.  **Installation:**
     * Clone the repository.
     * Install dependencies: `bun install`.
-3.  **Database Setup:**
+3.  **Configuration Setup:**
     * Database setup is handled by docker-compose.
     * You can modify configuration in docker-compose.yml file.
-4.  **Run the application:** `bun dev` defaults to port `3000`
+    * You must add environment variables to a `.env` file according to `.env.example`.
+4.  **Run the application:** Run `bun dev`. defaults to port `3000`.
 5.  **API Documentation:** Access the API documentation at the configured OpenAPI endpoint `/reference`.
 
 ## Extension Features

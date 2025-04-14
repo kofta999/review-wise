@@ -16,14 +16,6 @@ export class BusinessRepository implements IBusinessRepository {
     this.db = db;
   }
 
-  private async exists(businessId: number): Promise<boolean> {
-    const exists = sql<IExistsQuery>`select 1 as "exists" from business where business_id = $businessId`;
-
-    const res = await exists.run({ businessId }, this.db);
-
-    return res.length !== 0;
-  }
-
   async create(business: Business): Promise<number> {
     const createBusiness = sql<ICreateBusinessQuery>`insert into business(name, description, user_id)
       values ($name, $description, $userId) returning business_id`;

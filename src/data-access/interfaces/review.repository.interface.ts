@@ -7,6 +7,7 @@ export interface IReviewRepository {
   getReviewsForBusiness(
     businessId: number,
     pagination: { limit: number; offset: number },
+    sorting: { asc: boolean; field: string },
   ): Promise<Review<never>[]>;
   getRatingsForBusiness(businessId: number): Promise<Rating[]>;
   getReviewCount(businessId: number): Promise<number>;

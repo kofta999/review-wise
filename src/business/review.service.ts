@@ -25,13 +25,24 @@ export class ReviewService implements IReviewService {
 
   async getReviewsForBusiness(
     businessId: number,
-    { pagination }: { pagination: { limit: number; page: number } },
+    {
+      pagination,
+      sorting,
+    }: {
+      pagination: { limit: number; page: number };
+
+      sorting: { asc: boolean; field: "rating" | "date" };
+    },
   ): Promise<GetBusinessReviewsDTO> {
     const reviews = await this.reviewRepository.getReviewsForBusiness(
       businessId,
       {
         limit: pagination.limit,
         offset: pagination.limit * (pagination.page - 1),
+      },
+      {
+        asc: sorting.asc,
+        field: sorting.field,
       },
     );
 

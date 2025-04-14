@@ -50,6 +50,7 @@ export class ReviewRepository implements IReviewRepository {
   async getReviewsForBusiness(
     businessId: number,
     { limit, offset }: { limit: number; offset: number },
+    { asc, field }: { asc: boolean; field: string },
   ): Promise<Review<never>[]> {
     if (!(await this.exists(businessId))) {
       throw new BusinessNotFoundError(businessId);
@@ -57,12 +58,18 @@ export class ReviewRepository implements IReviewRepository {
 
     const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select
       review_id as "reviewId", business_id as "businessId", title, rating, description, created_at as "createdAt"
-      from review where business_id = $businessId
+      from review
+      where business_id = $businessId
+      order by (case when $field = 'rating' and $asc = true then rating end) asc,
+               (case when $field = 'rating' and $asc = false then rating end) desc,
+               (case when $field = 'date' and $asc = true then created_at end) asc,
+               (case when $field = 'date' and $asc = false then created_at end) desc
       limit $limit
-      offset $offset`;
+      offset $offset
+      `;
 
     const res = await getReviewsForBusiness.run(
-      { businessId, limit, offset },
+      { businessId, limit, offset, asc, field },
       this.db,
     );
 

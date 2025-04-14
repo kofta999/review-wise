@@ -52,7 +52,9 @@ export interface IRemoveReviewQuery {
 
 /** 'GetReviewsForBusiness' parameters type */
 export interface IGetReviewsForBusinessParams {
+  asc?: boolean | null | void;
   businessId?: number | null | void;
+  field?: string | null | void;
   limit?: NumberOrString | null | void;
   offset?: NumberOrString | null | void;
 }

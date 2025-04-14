@@ -60,7 +60,7 @@ describe("Review service", () => {
           reviewId: 1,
           businessId: 1,
           description: "test",
-          rating: 2,
+          rating: 3,
           title: "test",
           createdAt: new Date(),
         },
@@ -68,16 +68,20 @@ describe("Review service", () => {
           reviewId: 2,
           businessId: 1,
           description: "test",
-          rating: 3,
+          rating: 2,
           title: "test",
           createdAt: new Date(),
         },
       ];
 
-      const paginationParams = {
+      const params = {
         pagination: {
           limit: 10,
           page: 1,
+        },
+        sorting: {
+          asc: true,
+          field: "rating" as const,
         },
       };
 
@@ -86,7 +90,7 @@ describe("Review service", () => {
       mockReviewRepo.getReviewsForBusiness.mockResolvedValueOnce(reviewsMock);
       mockReviewRepo.getReviewCount.mockResolvedValueOnce(reviewCount);
 
-      const result = await service.getReviewsForBusiness(1, paginationParams);
+      const result = await service.getReviewsForBusiness(1, params);
 
       // Check the returned data structure
       expect(result).toHaveProperty("data");
@@ -107,12 +111,14 @@ describe("Review service", () => {
 
       // Verify repository calls
       expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledTimes(1);
-      expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledWith(1, {
-        limit: paginationParams.pagination.limit,
-        offset:
-          paginationParams.pagination.limit *
-          (paginationParams.pagination.page - 1),
-      });
+      expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledWith(
+        1,
+        {
+          limit: params.pagination.limit,
+          offset: params.pagination.limit * (params.pagination.page - 1),
+        },
+        { asc: params.sorting.asc, field: params.sorting.field },
+      );
       expect(mockReviewRepo.getReviewCount).toHaveBeenCalledTimes(1);
       expect(mockReviewRepo.getReviewCount).toHaveBeenCalledWith(1);
     });
@@ -129,10 +135,14 @@ describe("Review service", () => {
         },
       ];
 
-      const paginationParams = {
+      const params = {
         pagination: {
           limit: 5,
           page: 2,
+        },
+        sorting: {
+          asc: true,
+          field: "rating" as const,
         },
       };
 
@@ -141,7 +151,7 @@ describe("Review service", () => {
       mockReviewRepo.getReviewsForBusiness.mockResolvedValueOnce(reviewsMock);
       mockReviewRepo.getReviewCount.mockResolvedValueOnce(reviewCount);
 
-      const result = await service.getReviewsForBusiness(1, paginationParams);
+      const result = await service.getReviewsForBusiness(1, params);
 
       // Verify the meta content for page 2
       expect(result.meta).toEqual({
@@ -153,10 +163,14 @@ describe("Review service", () => {
       });
 
       // Verify correct offset calculation
-      expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledWith(1, {
-        limit: 5,
-        offset: 5, // limit * (page - 1) = 5 * (2 - 1) = 5
-      });
+      expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledWith(
+        1,
+        {
+          limit: 5,
+          offset: 5, // limit * (page - 1) = 5 * (2 - 1) = 5
+        },
+        { asc: params.sorting.asc, field: params.sorting.field },
+      );
     });
 
     it("Should handle error cases from review repository", async () => {
@@ -167,6 +181,7 @@ describe("Review service", () => {
       expect(
         service.getReviewsForBusiness(1, {
           pagination: { limit: 10, page: 1 },
+          sorting: { asc: true, field: "rating" },
         }),
       ).rejects.toThrowError("database error");
       expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledTimes(1);
@@ -192,6 +207,7 @@ describe("Review service", () => {
       expect(
         service.getReviewsForBusiness(1, {
           pagination: { limit: 10, page: 1 },
+          sorting: { asc: true, field: "rating" },
         }),
       ).rejects.toThrowError("count error");
 

@@ -58,10 +58,15 @@ export class BusinessController {
 
   getReviews: AppRouteHandler<GetReviewsRoute> = async (c) => {
     const { id } = c.req.valid("param");
-    const { limit, page } = c.req.valid("query");
+    const { limit, page, sort } = c.req.valid("query");
+
+    // Already validated
+    const sortOrder = sort[0] as "+" | "-";
+    const sortField = sort.substring(1) as "date" | "rating";
 
     const business = await this.reviewService.getReviewsForBusiness(id, {
       pagination: { limit, page },
+      sorting: { asc: sortOrder === "+", field: sortField },
     });
 
     return c.json(business, 200);

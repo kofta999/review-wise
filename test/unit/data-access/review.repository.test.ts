@@ -158,10 +158,14 @@ describe("Review repository", () => {
         rowCount: 2,
       });
 
-      const reviews = await repo.getReviewsForBusiness(1, {
-        limit: 2,
-        offset: 1,
-      });
+      const reviews = await repo.getReviewsForBusiness(
+        1,
+        {
+          limit: 2,
+          offset: 1,
+        },
+        { asc: true, field: "rating" },
+      );
 
       expect(reviews).toHaveLength(2);
       expect(reviews[0].reviewId).toBe(mockReviews[0].reviewId);
@@ -180,10 +184,14 @@ describe("Review repository", () => {
         rowCount: 0,
       });
 
-      const reviews = await repo.getReviewsForBusiness(1, {
-        limit: 2,
-        offset: 1,
-      });
+      const reviews = await repo.getReviewsForBusiness(
+        1,
+        {
+          limit: 2,
+          offset: 1,
+        },
+        { asc: true, field: "rating" },
+      );
 
       expect(reviews).toEqual([]);
       expect(mockDb.query).toHaveBeenCalledTimes(1);
@@ -194,7 +202,14 @@ describe("Review repository", () => {
       mockDb.query.mockRejectedValueOnce(dbError);
 
       expect(
-        repo.getReviewsForBusiness(1, { limit: 2, offset: 1 }),
+        repo.getReviewsForBusiness(
+          1,
+          {
+            limit: 2,
+            offset: 1,
+          },
+          { asc: true, field: "rating" },
+        ),
       ).rejects.toThrow("Database error");
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });

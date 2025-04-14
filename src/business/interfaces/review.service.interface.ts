@@ -5,6 +5,9 @@ export interface IReviewService {
   reviewBusiness(dto: ReviewBusinessDTO): Promise<number>;
   getReviewsForBusiness(
     businessId: number,
-    options: { pagination: { limit: number; page: number } },
+    options: {
+      pagination: { limit: number; page: number };
+      sorting: { asc: boolean; field: "rating" | "date" };
+    },
   ): Promise<GetBusinessReviewsDTO>;
 }

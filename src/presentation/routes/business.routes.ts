@@ -55,6 +55,14 @@ export const getReviews = createRoute({
     query: z.object({
       page: z.coerce.number().optional().default(1),
       limit: z.coerce.number().optional().default(5),
+      sort: z
+        .string()
+        .regex(
+          /^(\+|\-)(date|rating)$/i,
+          "Should be on format (+|-)(rating|date), where + is ascending, example +rating",
+        )
+        .optional()
+        .default("+date"),
     }),
   },
   responses: {

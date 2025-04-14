@@ -1,4 +1,4 @@
-import { exec, execSync } from "child_process";
+import { exec, execSync } from "node:child_process";
 
 function runCommand(command) {
 	try {
@@ -26,6 +26,9 @@ function nukeAndInitDB() {
 	// Run the initialization scripts
 	runCommand(
 		"docker exec -i review_wise_pg psql -U test -d review_wise_db -f /docker-entrypoint-initdb.d/schema.sql",
+	);
+	runCommand(
+		"docker exec -i review_wise_pg psql -U test -d review_wise_db -f /docker-entrypoint-initdb.d/seed.sql",
 	);
 }
 

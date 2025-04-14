@@ -87,18 +87,18 @@ Here's an ASCII diagram illustrating the typical data flow for a request:
          V
 +---------------------+
 |  3. Service         |
-|  (Business Logic)  |
+|  (Business Logic)   |
 +---------------------+
          |
          V
 +---------------------+
-|  4. Domain Entities  |
+|  4. Domain Entities |
 +---------------------+
          |
          V
 +---------------------+
 |  5. Data Access Layer|
-|  (Repositories)     |
+|  (Repositories)      |
 +---------------------+
          |
          V
@@ -108,7 +108,7 @@ Here's an ASCII diagram illustrating the typical data flow for a request:
          |
          V
 +---------------------+
-|  7. Response         |
+|  7. Response        |
 +---------------------+
 ```
 
@@ -171,17 +171,17 @@ Table: users
 Table: business
   ┌────────────┬───────────────────────────────┐
   │ business_id│ SERIAL [pk, increment]        │
-  │ user_id    │ INT [not null]                │◄─────────────┐
-  │ name       │ VARCHAR [not null]            │              │
-  │ description│ VARCHAR [not null]            │              │
-  └────────────┴───────────────────────────────┘              │
-                                                              │
-         │                                                    │
-         │                                                    │
-         ▼                                                    │
-Table: review                                                 │
-  ┌────────────┬────────────────────────────────────────────────────────────┐
-  │ review_id  │ SERIAL [pk, increment]                                     │
+  │ user_id    │ INT [not null]                │◄──────────────────────────────┐
+  │ name       │ VARCHAR [not null]            │                               │
+  │ description│ VARCHAR [not null]            │                               │
+  └────────────┴───────────────────────────────┘                               │
+                                                                               │
+         │                                                                     │
+         │                                                                     │
+         ▼                                                                     │
+Table: review                                                                  │
+  ┌────────────┬────────────────────────────────────────────────────────────┐  |
+  │ review_id  │ SERIAL [pk, increment]                                     │  | 
   │ business_id│ INT [not null]                                             │──┘
   │ rating     │ INT [not null]                                             │
   │ title      │ VARCHAR [not null]                                         │

@@ -45,4 +45,9 @@ export class BusinessService implements IBusinessService {
       averageRating: business.calculateAverageRating(ratings),
     };
   }
+
+  async adminRemoveBusiness(businessId: number): Promise<void> {
+    await this.businessRepository.remove(businessId);
+    this.logger.info(`Admin has deleted business with ID ${businessId}`);
+  }
 }

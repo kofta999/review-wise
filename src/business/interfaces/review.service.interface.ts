@@ -10,4 +10,5 @@ export interface IReviewService {
       sorting: { asc: boolean; field: "rating" | "date" };
     },
   ): Promise<GetBusinessReviewsDTO>;
+  adminRemoveReview(reviewId: number): Promise<void>;
 }

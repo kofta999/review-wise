@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import { BusinessNotFoundError } from "@/common/errors/business-not-found";
-import { UserNotFoundError } from "@/common/errors/user-not-found";
-import { BusinessRepository } from "@/data-access/business.repository";
 import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
 import { UserRepository } from "@/data-access/user.repository";
-import { Business } from "@/domain/entities/business";
 import { User } from "@/domain/entities/user";
 import {
   type MockDatabaseConnection,
@@ -78,7 +74,7 @@ describe("User repository", () => {
 
       const userId = 1;
 
-      const user = await repo.getById(userId);
+      const user = (await repo.getById(userId)) as User;
 
       expect(user).toBeInstanceOf(User);
       expect(user.userId).toBe(mockUserData.user_id);
@@ -91,13 +87,15 @@ describe("User repository", () => {
       );
     });
 
-    it("Should throw error if user is not found", async () => {
+    it("Should return null if user is not found", async () => {
       mockDb.query.mockResolvedValueOnce({
         rows: [], // Empty result
         rowCount: 0,
       });
 
-      expect(repo.getById(999)).rejects.toThrow(UserNotFoundError);
+      const user = await repo.getById(999);
+
+      expect(user).toBe(null);
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
 
@@ -123,7 +121,7 @@ describe("User repository", () => {
 
       const email = "test";
 
-      const user = await repo.getByEmail(email);
+      const user = (await repo.getByEmail(email)) as User;
 
       expect(user).toBeInstanceOf(User);
       expect(user.userId).toBe(mockUserData.user_id);
@@ -136,13 +134,16 @@ describe("User repository", () => {
       );
     });
 
-    it("Should throw error if user is not found", async () => {
+    it("Should return null if user is not found", async () => {
       mockDb.query.mockResolvedValueOnce({
         rows: [], // Empty result
         rowCount: 0,
       });
 
-      expect(repo.getByEmail("test")).rejects.toThrow(UserNotFoundError);
+      const user = await repo.getByEmail("test");
+
+      expect(user).toBe(null);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
 

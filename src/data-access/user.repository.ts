@@ -30,13 +30,13 @@ export class UserRepository implements IUserRepository {
     return res[0].user_id;
   }
 
-  async getById(userId: number): Promise<User> {
+  async getById(userId: number): Promise<User | null> {
     const getUserById = sql<IGetUserByIdQuery>`select * from "user" where "user_id" = $userId`;
 
     const res = await getUserById.run({ userId }, this.db);
 
     if (res.length === 0) {
-      throw new UserNotFoundError(userId);
+      return null;
     }
 
     return new User({
@@ -48,13 +48,13 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async getByEmail(email: string): Promise<User> {
+  async getByEmail(email: string): Promise<User | null> {
     const getUserByEmail = sql<IGetUserByEmailQuery>`select * from "user" where "email" = $email`;
 
     const res = await getUserByEmail.run({ email }, this.db);
 
     if (res.length === 0) {
-      throw new UserNotFoundError();
+      return null;
     }
 
     return new User({

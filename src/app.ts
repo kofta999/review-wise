@@ -2,6 +2,7 @@ import configureOpenAPI from "@/common/util/configure-open-api";
 import { createRouter } from "@/common/util/create-router";
 import { BusinessRepository } from "@/data-access/business.repository";
 import { BusinessController } from "@/presentation/controllers/business.controller";
+import * as adminRoutes from "@/presentation/routes/admin.routes";
 import * as authRoutes from "@/presentation/routes/auth.routes";
 import * as businessRoutes from "@/presentation/routes/business.routes";
 import { rateLimiter } from "hono-rate-limiter";
@@ -19,6 +20,7 @@ import type { AppOpenAPI } from "./common/types";
 import { ReviewRepository } from "./data-access/review.repository";
 import { UserRepository } from "./data-access/user.repository";
 import env from "./env";
+import { AdminController } from "./presentation/controllers/admin.controller";
 import { AuthController } from "./presentation/controllers/auth.controller";
 
 function injectDeps(app: AppOpenAPI) {
@@ -56,6 +58,7 @@ function injectDeps(app: AppOpenAPI) {
     userService,
   );
   const authController = new AuthController(userService);
+  const adminController = new AdminController(businessService, reviewService);
 
   // Routers
   const businessRouter = createRouter()
@@ -69,9 +72,14 @@ function injectDeps(app: AppOpenAPI) {
     authController.login,
   );
 
+  const adminRouter = createRouter()
+    .openapi(adminRoutes.deleteBusiness, adminController.deleteBusiness)
+    .openapi(adminRoutes.deleteReview, adminController.deleteReview);
+
   app
     .route("/api/v1/businesses", businessRouter)
-    .route("/api/v1/auth", authRouter);
+    .route("/api/v1/auth", authRouter)
+    .route("/api/v1/admin", adminRouter);
 }
 
 // Initializes all middlewares etc

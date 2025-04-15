@@ -2,17 +2,23 @@ import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
 import type { IReviewService } from "@/business/interfaces/review.service.interface";
 import { ReviewService } from "@/business/review.service";
 import {
+  type MockBusinessRepository,
+  createMockBusinessRepository,
+} from "test/helpers/mock-business-repository";
+import {
   type MockReviewRepository,
   createMockReviewRepository,
 } from "test/helpers/mock-review-repository";
 
 describe("Review service", () => {
   let mockReviewRepo: MockReviewRepository;
+  let mockBusinessRepo: MockBusinessRepository;
   let service: IReviewService;
 
   beforeEach(() => {
     mockReviewRepo = createMockReviewRepository();
-    service = new ReviewService(mockReviewRepo);
+    mockBusinessRepo = createMockBusinessRepository();
+    service = new ReviewService(mockReviewRepo, mockBusinessRepo);
   });
 
   afterEach(() => {
@@ -28,6 +34,7 @@ describe("Review service", () => {
         title: "test",
       };
 
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
       mockReviewRepo.create.mockResolvedValueOnce(1);
 
       const reviewId = await service.reviewBusiness(review);
@@ -44,6 +51,24 @@ describe("Review service", () => {
         title: "test",
       };
 
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
+      mockReviewRepo.create.mockRejectedValueOnce(new Error("database error"));
+
+      expect(service.reviewBusiness(review)).rejects.toThrowError(
+        "database error",
+      );
+      expect(mockReviewRepo.create).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw an error if the business does not exist", async () => {
+      const review = {
+        businessId: 1,
+        description: "test",
+        rating: 2,
+        title: "test",
+      };
+
+      mockBusinessRepo.exists.mockResolvedValueOnce(false);
       mockReviewRepo.create.mockRejectedValueOnce(new Error("database error"));
 
       expect(service.reviewBusiness(review)).rejects.toThrowError(
@@ -87,6 +112,7 @@ describe("Review service", () => {
 
       const reviewCount = 15;
 
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
       mockReviewRepo.getReviewsForBusiness.mockResolvedValueOnce(reviewsMock);
       mockReviewRepo.getReviewCount.mockResolvedValueOnce(reviewCount);
 
@@ -148,6 +174,7 @@ describe("Review service", () => {
 
       const reviewCount = 9;
 
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
       mockReviewRepo.getReviewsForBusiness.mockResolvedValueOnce(reviewsMock);
       mockReviewRepo.getReviewCount.mockResolvedValueOnce(reviewCount);
 
@@ -174,6 +201,7 @@ describe("Review service", () => {
     });
 
     it("Should handle error cases from review repository", async () => {
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
       mockReviewRepo.getReviewsForBusiness.mockRejectedValueOnce(
         new Error("database error"),
       );
@@ -199,6 +227,7 @@ describe("Review service", () => {
         },
       ];
 
+      mockBusinessRepo.exists.mockResolvedValueOnce(true);
       mockReviewRepo.getReviewsForBusiness.mockResolvedValueOnce(reviewsMock);
       mockReviewRepo.getReviewCount.mockRejectedValueOnce(
         new Error("count error"),
@@ -213,6 +242,23 @@ describe("Review service", () => {
 
       expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledTimes(1);
       expect(mockReviewRepo.getReviewCount).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should handle error cases from exists", async () => {
+      mockBusinessRepo.exists.mockRejectedValueOnce(
+        new Error("database error"),
+      );
+
+      expect(
+        service.getReviewsForBusiness(1, {
+          pagination: { limit: 10, page: 1 },
+          sorting: { asc: true, field: "rating" },
+        }),
+      ).rejects.toThrowError("database error");
+
+      expect(mockBusinessRepo.exists).toHaveBeenCalledTimes(1);
+      expect(mockReviewRepo.getReviewsForBusiness).toHaveBeenCalledTimes(0);
+      expect(mockReviewRepo.getReviewCount).toHaveBeenCalledTimes(0);
     });
   });
 });

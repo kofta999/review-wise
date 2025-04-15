@@ -131,6 +131,7 @@ describe("User service", () => {
       expect(mockJwtService.sign).toHaveBeenCalledWith({
         email: user.email,
         userId: 1,
+        role: "BUSINESS",
       });
     });
 

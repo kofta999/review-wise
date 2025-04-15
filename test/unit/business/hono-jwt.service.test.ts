@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest, mock } from "bun:test";
+import { beforeEach, describe, expect, it, jest, mock, spyOn } from "bun:test";
 import { HonoJwtService } from "@/business/hono-jwt.service";
 import { sign, verify } from "hono/jwt";
 
@@ -22,12 +22,25 @@ describe("HonoJwtService", () => {
       const payload = { userId: 123 };
       const expectedToken = "jwt.token.string";
 
+      // Mock Date.now() to have a consistent timestamp
+      const fakeNow = 1600000000000; // example timestamp (2020-09-13)
+      const nowSeconds = Math.floor(fakeNow / 1000);
+      spyOn(Date, "now").mockReturnValue(fakeNow);
+
       (sign as jest.Mock).mockResolvedValueOnce(expectedToken);
 
       const result = await jwtService.sign(payload);
 
       expect(result).toBe(expectedToken);
-      expect(sign).toHaveBeenCalledWith(payload, secret);
+      // Check that sign was called with the payload plus the timestamp fields
+      expect(sign).toHaveBeenCalledWith(
+        {
+          ...payload,
+          exp: nowSeconds + 60, // TOKEN_EXP_SECONDS = 60
+          iat: nowSeconds,
+        },
+        secret,
+      );
       expect(sign).toHaveBeenCalledTimes(1);
     });
 
@@ -37,7 +50,7 @@ describe("HonoJwtService", () => {
 
       (sign as jest.Mock).mockRejectedValueOnce(error);
 
-      await expect(jwtService.sign(payload)).rejects.toThrow(error);
+      expect(jwtService.sign(payload)).rejects.toThrow(error);
       expect(sign).toHaveBeenCalledTimes(1);
     });
   });
@@ -62,7 +75,7 @@ describe("HonoJwtService", () => {
 
       (verify as jest.Mock).mockRejectedValueOnce(error);
 
-      await expect(jwtService.verify(token)).rejects.toThrow(error);
+      expect(jwtService.verify(token)).rejects.toThrow(error);
       expect(verify).toHaveBeenCalledTimes(1);
     });
   });

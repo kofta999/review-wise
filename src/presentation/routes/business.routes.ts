@@ -5,7 +5,6 @@ import { ReviewBusinessSchema } from "@/common/dtos/review-business.dto";
 import { BaseApiError } from "@/common/errors/base-error";
 import { ErrorSchema } from "@/common/schemas/error-schema";
 import { IdSchema } from "@/common/schemas/id-schema";
-import type { AppBindings } from "@/common/types";
 import jsonContent from "@/common/util/json-content";
 import { createRoute, z } from "@hono/zod-openapi";
 import { rateLimiter } from "hono-rate-limiter";

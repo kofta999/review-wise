@@ -64,4 +64,9 @@ export class ReviewService implements IReviewService {
       },
     };
   }
+
+  async adminRemoveReview(reviewId: number): Promise<void> {
+    await this.reviewRepository.remove(reviewId);
+    this.logger.info(`Admin has deleted review with ID ${reviewId}`);
+  }
 }

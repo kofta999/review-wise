@@ -6,4 +6,5 @@ export interface IBusinessService {
     newBusiness: Pick<Business, "name" | "description" | "userId">,
   ): Promise<number>;
   getBusinessById(businessId: number): Promise<GetBusinessDTO>;
+  adminRemoveBusiness(businessId: number): Promise<void>;
 }

@@ -1,6 +1,7 @@
 import type { LoginUserDTO } from "@/common/dtos/login-user.dto";
 import { InvalidCredentialsError } from "@/common/errors/invalid-credentials";
 import { ResourceAlreadyExists } from "@/common/errors/resource-already-exists";
+import { UserNotFoundError } from "@/common/errors/user-not-found";
 import { Logger } from "@/common/util/logger";
 import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
 import { User } from "@/domain/entities/user";
@@ -53,6 +54,10 @@ export class UserService implements IUserService {
   async loginUser(dto: LoginUserDTO): Promise<string> {
     const user = await this.userRepository.getByEmail(dto.email);
 
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+
     const isPasswordValid = await this.passwordService.comparePassword(
       dto.password,
       user.password,
@@ -65,7 +70,10 @@ export class UserService implements IUserService {
     const token = await this.jwtService.sign({
       email: user.email,
       userId: user.userId,
+      role: user.role,
     });
+
+    this.logger.info(`User with ID ${user.userId} has logged in`);
 
     return token;
   }

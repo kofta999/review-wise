@@ -4,7 +4,6 @@ import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
-  IExistsQuery,
   IGetBusinessByIdQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";

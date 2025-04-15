@@ -4,6 +4,7 @@ import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
+  IExistsQuery,
   IGetBusinessByIdQuery,
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
@@ -13,6 +14,14 @@ export class BusinessRepository implements IBusinessRepository {
 
   constructor(db: IDatabaseConnection) {
     this.db = db;
+  }
+
+  async exists(businessId: number): Promise<boolean> {
+    const exists = sql<IExistsQuery>`select 1 as "exists" from business where business_id = $businessId`;
+
+    const res = await exists.run({ businessId }, this.db);
+
+    return res.length !== 0;
   }
 
   async create(business: Business): Promise<number> {

@@ -1,22 +1,6 @@
 /** Types generated for queries found in "src/data-access/review.repository.ts" */
 export type NumberOrString = number | string;
 
-/** 'Exists' parameters type */
-export interface IExistsParams {
-  businessId?: number | null | void;
-}
-
-/** 'Exists' return type */
-export interface IExistsResult {
-  exists: number | null;
-}
-
-/** 'Exists' query type */
-export interface IExistsQuery {
-  params: IExistsParams;
-  result: IExistsResult;
-}
-
 /** 'CreateReview' parameters type */
 export interface ICreateReviewParams {
   businessId?: number | null | void;

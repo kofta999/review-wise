@@ -1,20 +1,32 @@
 import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { ReviewBusinessDTO } from "@/common/dtos/review-business.dto";
+import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import { Logger } from "@/common/util/logger";
+import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
 import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
 import { Review } from "@/domain/entities/review";
 import type { IReviewService } from "./interfaces/review.service.interface";
 
 export class ReviewService implements IReviewService {
   private reviewRepository: IReviewRepository;
+  private businessRepository: IBusinessRepository;
   private logger = Logger.getLogger();
 
-  constructor(reviewRepository: IReviewRepository) {
+  constructor(
+    reviewRepository: IReviewRepository,
+    businessRepository: IBusinessRepository,
+  ) {
     this.reviewRepository = reviewRepository;
+    this.businessRepository = businessRepository;
   }
 
   async reviewBusiness(dto: ReviewBusinessDTO): Promise<number> {
     const review = new Review({ ...dto });
+    const businessExists = this.businessRepository.exists(dto.businessId);
+
+    if (!businessExists) {
+      throw new BusinessNotFoundError(dto.businessId);
+    }
 
     const res = await this.reviewRepository.create(review);
 
@@ -34,6 +46,12 @@ export class ReviewService implements IReviewService {
       sorting: { asc: boolean; field: "rating" | "date" };
     },
   ): Promise<GetBusinessReviewsDTO> {
+    const businessExists = await this.businessRepository.exists(businessId);
+
+    if (!businessExists) {
+      throw new BusinessNotFoundError(businessId);
+    }
+
     const reviews = await this.reviewRepository.getReviewsForBusiness(
       businessId,
       {

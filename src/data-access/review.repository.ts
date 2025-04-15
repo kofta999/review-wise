@@ -5,7 +5,6 @@ import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
 import type { IReviewRepository } from "./interfaces/review.repository.interface";
 import type {
   ICreateReviewQuery,
-  IExistsQuery,
   IGetCountForBusinessQuery,
   IGetRatingsForBusinessQuery,
   IGetReviewsForBusinessQuery,
@@ -19,20 +18,7 @@ export class ReviewRepository implements IReviewRepository {
     this.db = db;
   }
 
-  // TODO: Revisit this duplication later
-  private async exists(businessId: number): Promise<boolean> {
-    const exists = sql<IExistsQuery>`select 1 as "exists" from business where business_id = $businessId`;
-
-    const res = await exists.run({ businessId }, this.db);
-
-    return res.length !== 0;
-  }
-
   async create(review: Review) {
-    if (!(await this.exists(review.businessId))) {
-      throw new BusinessNotFoundError(review.businessId);
-    }
-
     const createReview = sql<ICreateReviewQuery>`insert into review(business_id, rating, title, description)
       values ($businessId, $rating, $title, $description) returning review_id`;
 
@@ -52,10 +38,6 @@ export class ReviewRepository implements IReviewRepository {
     { limit, offset }: { limit: number; offset: number },
     { asc, field }: { asc: boolean; field: string },
   ): Promise<Review<never>[]> {
-    if (!(await this.exists(businessId))) {
-      throw new BusinessNotFoundError(businessId);
-    }
-
     const getReviewsForBusiness = sql<IGetReviewsForBusinessQuery>`select
       review_id as "reviewId", business_id as "businessId", title, rating, description, created_at as "createdAt"
       from review
@@ -77,10 +59,6 @@ export class ReviewRepository implements IReviewRepository {
   }
 
   async getRatingsForBusiness(businessId: number): Promise<Rating[]> {
-    if (!(await this.exists(businessId))) {
-      throw new BusinessNotFoundError(businessId);
-    }
-
     const getRatingsForBusiness = sql<IGetRatingsForBusinessQuery>`select rating from review where business_id = $businessId`;
 
     const res = await getRatingsForBusiness.run({ businessId }, this.db);

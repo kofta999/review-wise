@@ -2,13 +2,15 @@ import { HonoJwtService } from "@/business/hono-jwt.service";
 import env from "@/env";
 import { createMiddleware } from "hono/factory";
 import { UnauthorizedError } from "../errors/unauthorized";
-import type { AppBindings } from "../types";
+import type { AppBindings, UserRole } from "../types";
 
 export const authMiddleware = createMiddleware<AppBindings>(async (c, next) => {
   // TODO: Decouple
-  const jwtService = new HonoJwtService<{ email: string; id: string }>(
-    env.JWT_SECRET,
-  );
+  const jwtService = new HonoJwtService<{
+    email: string;
+    id: string;
+    role: UserRole;
+  }>(env.JWT_SECRET);
   const header = c.req.header("Authorization");
 
   if (!header) {

@@ -2,10 +2,13 @@ import { GetBusinessReviewsSchema } from "@/common/dtos/get-business-reviews.dto
 import { GetBusinessSchema } from "@/common/dtos/get-business.dto";
 import { RegisterBusinessSchema } from "@/common/dtos/register-business.dto";
 import { ReviewBusinessSchema } from "@/common/dtos/review-business.dto";
+import { BaseApiError } from "@/common/errors/base-error";
 import { ErrorSchema } from "@/common/schemas/error-schema";
 import { IdSchema } from "@/common/schemas/id-schema";
 import jsonContent from "@/common/util/json-content";
 import { createRoute, z } from "@hono/zod-openapi";
+import { rateLimiter } from "hono-rate-limiter";
+import { getConnInfo } from "hono/bun";
 
 const tags = ["Business"];
 
@@ -77,6 +80,19 @@ export const submitReview = createRoute({
   path: "/{id}/reviews",
   method: "post",
   tags,
+  middleware: [
+    rateLimiter({
+      windowMs: 24 * 60 * 60 * 1000, // 1 day
+      limit: 1,
+      keyGenerator: (c) => `${getConnInfo(c).remote.address}#${c.req.path}`,
+      handler: () => {
+        throw new BaseApiError(
+          429,
+          "Too many requests, please try again later",
+        );
+      },
+    }),
+  ] as const,
   summary: "Submit a review",
   request: {
     params: IdSchema,

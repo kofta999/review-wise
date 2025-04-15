@@ -44,7 +44,7 @@ function injectDeps(app: AppOpenAPI) {
     businessRepository,
     reviewRepository,
   );
-  const reviewService = new ReviewService(reviewRepository);
+  const reviewService = new ReviewService(reviewRepository, businessRepository);
   const userService = new UserService(
     userRepository,
     passwordService,

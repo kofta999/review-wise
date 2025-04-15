@@ -3,6 +3,10 @@ INSERT INTO "user" (email, password, role) VALUES
 ('bistro_owner@example.com', 'hashed_password_1', 'BUSINESS'),
 ('cafe_owner@example.com', 'hashed_password_2', 'BUSINESS');
 
+-- Insert admins
+INSERT INTO "user" (email, password, role) VALUES
+('admin1@example.com', '$argon2id$v=19$m=65536,t=2,p=1$I7pM8iN3PZwe7mFIYS2bxggKDimr0ZlcfipPjO7Qe8o$2f7nEaJnKsyqdZOP2/0jmlPdZkbuQMPhGPi3jPl6034', 'ADMIN');
+
 -- Insert test businesses
 INSERT INTO "business" (user_id, name, description) VALUES
 (1, 'Riverside Bistro', 'A cozy restaurant with riverside views and international cuisine'),

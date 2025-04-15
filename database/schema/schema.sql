@@ -13,7 +13,7 @@ CREATE TABLE "business" (
     "user_id" INT NOT NULL,
     "name" VARCHAR NOT NULL,
     "description" VARCHAR NOT NULL,
-    FOREIGN KEY ("user_id") REFERENCES "user" ("user_id")
+    FOREIGN KEY ("user_id") REFERENCES "user" ("user_id") ON DELETE CASCADE
 );
 
 CREATE TABLE "review" (
@@ -23,6 +23,6 @@ CREATE TABLE "review" (
     "title" VARCHAR NOT NULL,
     "description" VARCHAR NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY ("business_id") REFERENCES "business" ("business_id"),
+    FOREIGN KEY ("business_id") REFERENCES "business" ("business_id") ON DELETE CASCADE,
     CHECK ("rating" BETWEEN 1 AND 5)
 );

@@ -1,9 +1,9 @@
--- Insert test users for businesses
+-- Insert test users for businesses (password is 12345678)
 INSERT INTO "user" (email, password, role) VALUES
-('bistro_owner@example.com', 'hashed_password_1', 'BUSINESS'),
-('cafe_owner@example.com', 'hashed_password_2', 'BUSINESS');
+('bistro_owner@example.com', '$argon2id$v=19$m=65536,t=2,p=1$I7pM8iN3PZwe7mFIYS2bxggKDimr0ZlcfipPjO7Qe8o$2f7nEaJnKsyqdZOP2/0jmlPdZkbuQMPhGPi3jPl6034', 'BUSINESS'),
+('cafe_owner@example.com', '$argon2id$v=19$m=65536,t=2,p=1$I7pM8iN3PZwe7mFIYS2bxggKDimr0ZlcfipPjO7Qe8o$2f7nEaJnKsyqdZOP2/0jmlPdZkbuQMPhGPi3jPl6034', 'BUSINESS');
 
--- Insert admins
+-- Insert admins (password is 12345678)
 INSERT INTO "user" (email, password, role) VALUES
 ('admin1@example.com', '$argon2id$v=19$m=65536,t=2,p=1$I7pM8iN3PZwe7mFIYS2bxggKDimr0ZlcfipPjO7Qe8o$2f7nEaJnKsyqdZOP2/0jmlPdZkbuQMPhGPi3jPl6034', 'ADMIN');
 

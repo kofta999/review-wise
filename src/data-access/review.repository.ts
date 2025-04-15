@@ -1,4 +1,3 @@
-import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import type { Rating } from "@/common/types";
 import { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";

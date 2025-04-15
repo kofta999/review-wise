@@ -140,4 +140,54 @@ describe("Business repository", () => {
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("exists", () => {
+    it("Should return true if business exists", async () => {
+      // Mock the database response for an existing business
+      mockDb.query.mockResolvedValueOnce({
+        rows: [{ exists: 1 }],
+        rowCount: 1,
+      });
+
+      const businessId = 123;
+      const result = await repo.exists(businessId);
+
+      // Assert the result is true
+      expect(result).toBe(true);
+
+      // Verify the query was called correctly
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('select 1 as "exists" from business'),
+        expect.any(Object),
+      );
+    });
+
+    it("Should return false if business does not exist", async () => {
+      // Mock the database response for a non-existing business (empty result)
+      mockDb.query.mockResolvedValueOnce({
+        rows: [],
+        rowCount: 0,
+      });
+
+      const nonExistentBusinessId = 999;
+      const result = await repo.exists(nonExistentBusinessId);
+
+      // Assert the result is false
+      expect(result).toBe(false);
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw error if query fails", async () => {
+      // Mock database error
+      const dbError = new Error("Database error");
+      mockDb.query.mockRejectedValueOnce(dbError);
+
+      const businessId = 123;
+
+      // Assert the method throws the expected error
+      expect(repo.exists(businessId)).rejects.toThrow("Database error");
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+  });
 });

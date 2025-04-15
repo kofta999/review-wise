@@ -254,4 +254,56 @@ describe("Review repository", () => {
       expect(mockDb.query).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("getReviewCount", () => {
+    it("Should return the count of reviews for a business", async () => {
+      // Mock the database response with a count
+      mockDb.query.mockResolvedValueOnce({
+        rows: [{ count: "42" }],
+        rowCount: 1,
+      });
+
+      const businessId = 1;
+      const count = await repo.getReviewCount(businessId);
+
+      // Assert the count was correctly parsed and returned
+      expect(count).toBe(42);
+      expect(typeof count).toBe("number");
+
+      // Verify the query was called correctly
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining("select count(1) as count from review"),
+        expect.any(Object),
+      );
+    });
+
+    it("Should throw error if count doesn't exist in response", async () => {
+      // Mock a response with no count field
+      mockDb.query.mockResolvedValueOnce({
+        rows: [{}],
+        rowCount: 1,
+      });
+
+      const businessId = 1;
+
+      // The method should throw because it expects a count field
+      expect(repo.getReviewCount(businessId)).rejects.toThrow(
+        "Should never happen",
+      );
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw error if query fails", async () => {
+      // Mock database error
+      const dbError = new Error("Database error");
+      mockDb.query.mockRejectedValueOnce(dbError);
+
+      const businessId = 1;
+
+      // Assert the method passes through the database error
+      expect(repo.getReviewCount(businessId)).rejects.toThrow("Database error");
+      expect(mockDb.query).toHaveBeenCalledTimes(1);
+    });
+  });
 });

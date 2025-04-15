@@ -139,4 +139,22 @@ describe("Business service", () => {
       expect(mockReviewRepo.getRatingsForBusiness).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("adminRemoveBusiness", () => {
+    it("Should remove a business for a businessId", async () => {
+      mockBusinessRepo.remove.mockResolvedValueOnce();
+
+      expect(service.adminRemoveBusiness(1)).resolves;
+      expect(mockBusinessRepo.remove).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should handle error cases from business repository", async () => {
+      mockBusinessRepo.remove.mockRejectedValueOnce(
+        new Error("database error"),
+      );
+
+      expect(service.adminRemoveBusiness(1)).rejects.toThrow("database error");
+      expect(mockBusinessRepo.remove).toHaveBeenCalledTimes(1);
+    });
+  });
 });

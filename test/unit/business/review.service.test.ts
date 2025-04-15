@@ -261,4 +261,20 @@ describe("Review service", () => {
       expect(mockReviewRepo.getReviewCount).toHaveBeenCalledTimes(0);
     });
   });
+
+  describe("adminRemoveReview", () => {
+    it("Should remove a review for a reviewId", async () => {
+      mockReviewRepo.remove.mockResolvedValueOnce();
+
+      expect(service.adminRemoveReview(1)).resolves;
+      expect(mockReviewRepo.remove).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should handle error cases from review repository", async () => {
+      mockReviewRepo.remove.mockRejectedValueOnce(new Error("database error"));
+
+      expect(service.adminRemoveReview(1)).rejects.toThrow("database error");
+      expect(mockReviewRepo.remove).toHaveBeenCalledTimes(1);
+    });
+  });
 });

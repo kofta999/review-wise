@@ -3,9 +3,12 @@
 	"scripts": {
 		"dev": "bun ./devScript.js | pino-pretty",
 		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json",
-		"pgtyped": "bunx pgtyped -c pgtyped.cjs"
+		"pgtyped": "bunx pgtyped -c pgtyped.cjs",
+		"build": "tsc && tsc-alias",
+		"start": "node ./dist/src/index.js"
 	},
 	"dependencies": {
+		"@hono/node-server": "^1.14.1",
 		"@hono/zod-openapi": "0.19.2",
 		"@pgtyped/runtime": "^2.4.2",
 		"@scalar/hono-api-reference": "^0.8.0",
@@ -20,6 +23,7 @@
 		"@pgtyped/cli": "^2.4.3",
 		"@types/bun": "latest",
 		"@types/pg": "^8.11.11",
-		"pino-pretty": "^13.0.0"
+		"pino-pretty": "^13.0.0",
+		"tsc-alias": "^1.8.15"
 	}
 }

@@ -1,5 +1,6 @@
 {
 	"name": "review-wise",
+	"type": "module",
 	"scripts": {
 		"dev": "bun ./devScript.js | pino-pretty",
 		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json",
@@ -12,6 +13,7 @@
 		"@hono/zod-openapi": "0.19.2",
 		"@pgtyped/runtime": "^2.4.2",
 		"@scalar/hono-api-reference": "^0.8.0",
+		"bcryptjs": "^3.0.2",
 		"hono": "^4.7.5",
 		"hono-pino": "^0.8.0",
 		"hono-rate-limiter": "^0.4.2",

@@ -5,10 +5,8 @@ import { BusinessController } from "@/presentation/controllers/business.controll
 import * as adminRoutes from "@/presentation/routes/admin.routes";
 import * as authRoutes from "@/presentation/routes/auth.routes";
 import * as businessRoutes from "@/presentation/routes/business.routes";
-import { rateLimiter } from "hono-rate-limiter";
-import { getConnInfo } from "hono/bun";
-import { Pool } from "pg";
-import { BunPasswordService } from "./business/bun-password.service";
+import pg from "pg";
+import { BcryptPasswordService } from "./business/bcrypt-password.service";
 import { BusinessService } from "./business/business.service";
 import { HonoJwtService } from "./business/hono-jwt.service";
 import { ReviewService } from "./business/review.service";
@@ -16,6 +14,7 @@ import { UserService } from "./business/user.service";
 import { BaseApiError } from "./common/errors/base-error";
 import { errorHandler } from "./common/middleware/error-handler.middleware.";
 import { loggerMiddleware } from "./common/middleware/pino-logger.middleware";
+import { rateLimiterMiddleware } from "./common/middleware/rate-limiter.middleware";
 import type { AppOpenAPI } from "./common/types";
 import { ReviewRepository } from "./data-access/review.repository";
 import { UserRepository } from "./data-access/user.repository";
@@ -24,13 +23,27 @@ import { AdminController } from "./presentation/controllers/admin.controller";
 import { AuthController } from "./presentation/controllers/auth.controller";
 
 function injectDeps(app: AppOpenAPI) {
-  const pool = new Pool({
-    port: env.PG_PORT,
-    host: env.PG_HOST,
-    user: env.PG_USER,
-    password: env.PG_PASSWORD,
-    database: env.PG_DB_NAME,
-  });
+  let config: pg.PoolConfig;
+
+  if (process.env.DATABASE_URL) {
+    config = {
+      connectionString: process.env.DATABASE_URL,
+
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
+  } else {
+    config = {
+      port: env.PG_PORT,
+      host: env.PG_HOST,
+      user: env.PG_USER,
+      password: env.PG_PASSWORD,
+      database: env.PG_DB_NAME,
+    };
+  }
+
+  const pool = new pg.Pool(config);
 
   // Repositories
   const businessRepository = new BusinessRepository(pool);
@@ -38,7 +51,7 @@ function injectDeps(app: AppOpenAPI) {
   const userRepository = new UserRepository(pool);
 
   // Services
-  const passwordService = new BunPasswordService();
+  const passwordService = new BcryptPasswordService();
   const jwtService = new HonoJwtService(env.JWT_SECRET);
   const businessService = new BusinessService(
     businessRepository,
@@ -86,24 +99,16 @@ function injectDeps(app: AppOpenAPI) {
 function bootstrap() {
   const app = createRouter();
   app.use(loggerMiddleware());
-  app.use(
-    rateLimiter({
-      limit: 50,
-      keyGenerator: (c) => `${getConnInfo(c).remote.address}#${c.req.path}`,
-      handler: () => {
-        throw new BaseApiError(
-          429,
-          "Too many requests, please try again later",
-        );
-      },
-    }),
-  );
+  app.use(rateLimiterMiddleware(50));
 
   configureOpenAPI(app);
 
   injectDeps(app);
 
   app.onError(errorHandler);
+
+  // Go to docs on /
+  app.get("/", (c) => c.redirect("/reference"));
 
   return app;
 }

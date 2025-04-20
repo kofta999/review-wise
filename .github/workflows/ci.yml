@@ -6,6 +6,9 @@ on:
 
   workflow_dispatch:
 
+env:
+  JWT_SECRET: test
+
 jobs:
   typecheck:
     runs-on: ubuntu-latest

@@ -79,7 +79,7 @@ export const submitReview = createRoute({
   path: "/{id}/reviews",
   method: "post",
   tags,
-  middleware: [rateLimiterMiddleware(1, 24 * 60 * 60 * 1000)] as const,
+  middleware: [rateLimiterMiddleware(5, 24 * 60 * 60 * 1000)] as const,
   summary: "Submit a review",
   request: {
     params: IdSchema,

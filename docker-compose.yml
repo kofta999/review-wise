@@ -35,6 +35,15 @@ services:
     depends_on:
       - postgres
 
+  redis:
+    image: redis:latest
+    container_name: review_wise_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - review_wise_network
+
 volumes:
   postgres_data:
   pgadmin_data:

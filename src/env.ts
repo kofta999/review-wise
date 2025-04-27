@@ -17,6 +17,7 @@ const EnvSchema = z.object({
   PG_PASSWORD: z.string().default("test"),
   PG_PORT: z.coerce.number().default(3000),
   JWT_SECRET: z.string(),
+  REDIS_URL: z.string().default("redis://localhost:6379"),
 });
 
 export type env = z.infer<typeof EnvSchema>;

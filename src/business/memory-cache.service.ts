@@ -1,6 +1,6 @@
 import type { ICacheService } from "./interfaces/cache.service.interface";
 
-export class CacheService implements ICacheService {
+export class CacheService {
   constructor(private cache: Map<string, unknown> = new Map()) {}
 
   get<T>(key: string): T | undefined {

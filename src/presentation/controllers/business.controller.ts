@@ -59,7 +59,9 @@ export class BusinessController {
   getById: AppRouteHandler<GetByIdRoute> = async (c) => {
     const { id } = c.req.valid("param");
 
-    const cached = this.cacheService.get<GetBusinessDTO>(`business:${id}`);
+    const cacheKey = `businesses:${id}`;
+
+    const cached = await this.cacheService.get<GetBusinessDTO>(cacheKey);
 
     if (cached) {
       this.logger.info(`Fetched business with ID ${id} from cache`);
@@ -68,7 +70,7 @@ export class BusinessController {
 
     const business = await this.businessService.getBusinessById(id);
 
-    this.cacheService.set(`business:${id}`, business);
+    this.cacheService.set(cacheKey, business);
 
     this.logger.info(`Added business with ID ${id} to cache`);
 
@@ -83,9 +85,9 @@ export class BusinessController {
     const sortOrder = sort[0] as "+" | "-";
     const sortField = sort.substring(1) as "date" | "rating";
 
-    const cached = this.cacheService.get<GetBusinessReviewsDTO>(
-      `business:${id}:reviews${sort}:${page}:${limit}`,
-    );
+    const cacheKey = `businesses:${id}:reviews:${sort}:${page}:${limit}`;
+
+    const cached = await this.cacheService.get<GetBusinessReviewsDTO>(cacheKey);
 
     if (cached) {
       this.logger.info(`Fetched reviews for business with ID ${id} from cache`);
@@ -97,10 +99,7 @@ export class BusinessController {
       sorting: { asc: sortOrder === "+", field: sortField },
     });
 
-    this.cacheService.set(
-      `business:${id}:reviews${sortField}${sortOrder}`,
-      business,
-    );
+    this.cacheService.set(cacheKey, business);
     this.logger.info(`Added reviews for business with ID ${id} to cache`);
 
     return c.json(business, 200);
@@ -119,9 +118,7 @@ export class BusinessController {
 
     const reviewId = await this.reviewService.reviewBusiness(body);
 
-    const cacheKey = `business:${id}:reviews`;
-
-    this.cacheService.del(cacheKey);
+    this.cacheService.delByPattern(`businesses:${id}:reviews`);
 
     return c.json({ reviewId }, 201);
   };

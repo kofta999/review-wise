@@ -8,8 +8,8 @@ import * as businessRoutes from "@/presentation/routes/business.routes";
 import pg from "pg";
 import { BcryptPasswordService } from "./business/bcrypt-password.service";
 import { BusinessService } from "./business/business.service";
-import { CacheService } from "./business/cache.service";
 import { HonoJwtService } from "./business/hono-jwt.service";
+import { RedisCacheService } from "./business/redis-cache.service";
 import { ReviewService } from "./business/review.service";
 import { UserService } from "./business/user.service";
 import { BaseApiError } from "./common/errors/base-error";
@@ -64,14 +64,14 @@ function injectDeps(app: AppOpenAPI) {
     passwordService,
     jwtService,
   );
-  const cacheService = new CacheService();
+  const redisCacheService = new RedisCacheService();
 
   // Controllers
   const businessController = new BusinessController(
     businessService,
     reviewService,
     userService,
-    cacheService,
+    redisCacheService,
   );
   const authController = new AuthController(userService);
   const adminController = new AdminController(businessService, reviewService);

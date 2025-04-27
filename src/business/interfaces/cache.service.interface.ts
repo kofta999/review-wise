@@ -1,6 +1,7 @@
 export interface ICacheService {
-  get<T>(key: string): T | undefined;
-  set(key: string, value: unknown): void;
-  has(key: string): boolean;
-  del(key: string): void;
+  get<T>(key: string): Promise<T | null>;
+  set(key: string, value: unknown): Promise<void>;
+  has(key: string): Promise<boolean>;
+  del(key: string): Promise<void>;
+  delByPattern(pattern: string): Promise<void>;
 }

@@ -84,7 +84,7 @@ export class BusinessController {
     const sortField = sort.substring(1) as "date" | "rating";
 
     const cached = this.cacheService.get<GetBusinessReviewsDTO>(
-      `business:${id}:reviews${sortField}${sortOrder}`,
+      `business:${id}:reviews${sort}:${page}:${limit}`,
     );
 
     if (cached) {

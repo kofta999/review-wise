@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import type { IPasswordService } from "./interfaces/password.service.interface";
+import { injectable } from "inversify";
 
+@injectable()
 export class BcryptPasswordService implements IPasswordService {
   private SALT_ROUNDS = 10 as const;
 

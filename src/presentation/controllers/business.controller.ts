@@ -5,8 +5,9 @@ import type { IUserService } from "@/business/interfaces/user.service.interface"
 import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
 import { BaseApiError } from "@/common/errors/base-error";
-import type { AppRouteHandler } from "@/common/types";
+import { type AppRouteHandler, TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
+import { inject } from "node_modules/inversify/lib/cjs";
 import type {
   GetByIdRoute,
   GetReviewsRoute,
@@ -22,10 +23,10 @@ export class BusinessController {
   private logger = Logger.getLogger();
 
   constructor(
-    businessService: IBusinessService,
-    reviewService: IReviewService,
-    userService: IUserService,
-    cacheService: ICacheService,
+    @inject(TYPES.IBusinessService) businessService: IBusinessService,
+    @inject(TYPES.IReviewService) reviewService: IReviewService,
+    @inject(TYPES.IUserService) userService: IUserService,
+    @inject(TYPES.ICacheService) cacheService: ICacheService,
   ) {
     this.businessService = businessService;
     this.reviewService = reviewService;

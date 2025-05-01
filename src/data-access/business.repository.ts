@@ -1,6 +1,8 @@
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
+import { TYPES } from "@/common/types";
 import { Business } from "@/domain/entities/business";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
+import { inject, injectable } from "inversify";
 import type { IBusinessRepository } from "./interfaces/business.repository.interface";
 import type {
   ICreateBusinessQuery,
@@ -9,10 +11,11 @@ import type {
   IRemoveBusinessQuery,
 } from "./types/business.repository.types";
 
+@injectable()
 export class BusinessRepository implements IBusinessRepository {
   db: IDatabaseConnection;
 
-  constructor(db: IDatabaseConnection) {
+  constructor(@inject(TYPES.IDatabaseConnection) db: IDatabaseConnection) {
     this.db = db;
   }
 

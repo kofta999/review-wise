@@ -1,80 +1,22 @@
 import configureOpenAPI from "@/common/util/configure-open-api";
 import { createRouter } from "@/common/util/create-router";
-import { BusinessRepository } from "@/data-access/business.repository";
 import { BusinessController } from "@/presentation/controllers/business.controller";
 import * as adminRoutes from "@/presentation/routes/admin.routes";
 import * as authRoutes from "@/presentation/routes/auth.routes";
 import * as businessRoutes from "@/presentation/routes/business.routes";
-import pg from "pg";
-import { BcryptPasswordService } from "./business/bcrypt-password.service";
-import { BusinessService } from "./business/business.service";
-import { HonoJwtService } from "./business/hono-jwt.service";
-import { RedisCacheService } from "./business/redis-cache.service";
-import { ReviewService } from "./business/review.service";
-import { UserService } from "./business/user.service";
-import { BaseApiError } from "./common/errors/base-error";
+import { mainContainer } from "./common/ioc";
 import { errorHandler } from "./common/middleware/error-handler.middleware.";
 import { loggerMiddleware } from "./common/middleware/pino-logger.middleware";
 import { rateLimiterMiddleware } from "./common/middleware/rate-limiter.middleware";
 import type { AppOpenAPI } from "./common/types";
-import { ReviewRepository } from "./data-access/review.repository";
-import { UserRepository } from "./data-access/user.repository";
-import env from "./env";
 import { AdminController } from "./presentation/controllers/admin.controller";
 import { AuthController } from "./presentation/controllers/auth.controller";
 
-function injectDeps(app: AppOpenAPI) {
-  let config: pg.PoolConfig;
-
-  if (process.env.DATABASE_URL) {
-    config = {
-      connectionString: process.env.DATABASE_URL,
-
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    };
-  } else {
-    config = {
-      port: env.PG_PORT,
-      host: env.PG_HOST,
-      user: env.PG_USER,
-      password: env.PG_PASSWORD,
-      database: env.PG_DB_NAME,
-    };
-  }
-
-  const pool = new pg.Pool(config);
-
-  // Repositories
-  const businessRepository = new BusinessRepository(pool);
-  const reviewRepository = new ReviewRepository(pool);
-  const userRepository = new UserRepository(pool);
-
-  // Services
-  const passwordService = new BcryptPasswordService();
-  const jwtService = new HonoJwtService(env.JWT_SECRET);
-  const businessService = new BusinessService(
-    businessRepository,
-    reviewRepository,
-  );
-  const reviewService = new ReviewService(reviewRepository, businessRepository);
-  const userService = new UserService(
-    userRepository,
-    passwordService,
-    jwtService,
-  );
-  const redisCacheService = new RedisCacheService();
-
+function initializeRouters(app: AppOpenAPI) {
   // Controllers
-  const businessController = new BusinessController(
-    businessService,
-    reviewService,
-    userService,
-    redisCacheService,
-  );
-  const authController = new AuthController(userService);
-  const adminController = new AdminController(businessService, reviewService);
+  const businessController = mainContainer.get(BusinessController);
+  const authController = mainContainer.get(AuthController);
+  const adminController = mainContainer.get(AdminController);
 
   // Routers
   const businessRouter = createRouter()
@@ -106,7 +48,7 @@ function bootstrap() {
 
   configureOpenAPI(app);
 
-  injectDeps(app);
+  initializeRouters(app);
 
   app.onError(errorHandler);
 

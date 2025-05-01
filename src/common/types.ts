@@ -20,3 +20,21 @@ export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
 export type Rating = number;
 
 export type UserRole = userrole;
+
+export const TYPES = {
+  // Repositories
+  IBusinessRepository: Symbol.for("IBusinessRepository"),
+  IReviewRepository: Symbol.for("IReviewRepository"),
+  IUserRepository: Symbol.for("IUserRepository"),
+  // Services
+  IBusinessService: Symbol.for("IBusinessService"),
+  IReviewService: Symbol.for("IReviewService"),
+  IUserService: Symbol.for("IUserService"),
+  ICacheService: Symbol.for("ICacheService"),
+  IJwtService: Symbol.for("IJwtService"),
+  IPasswordService: Symbol.for("IPasswordService"),
+  IDatabaseConnection: Symbol.for("IDatabaseConnection"),
+
+  // Constants
+  JWT_SECRET: Symbol.for("JWT_SECRET"),
+};

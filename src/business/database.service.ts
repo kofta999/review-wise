@@ -8,9 +8,9 @@ export class DatabaseService extends pg.Pool implements IDatabaseConnection {
   constructor() {
     let config: pg.PoolConfig;
 
-    if (process.env.DATABASE_URL) {
+    if (env.DATABASE_URL) {
       config = {
-        connectionString: process.env.DATABASE_URL,
+        connectionString: env.DATABASE_URL,
 
         ssl: {
           rejectUnauthorized: false,

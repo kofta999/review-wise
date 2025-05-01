@@ -7,7 +7,7 @@ import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
 import { BaseApiError } from "@/common/errors/base-error";
 import { type AppRouteHandler, TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
-import { inject } from "node_modules/inversify/lib/cjs";
+import { inject } from "inversify";
 import type {
   GetByIdRoute,
   GetReviewsRoute,

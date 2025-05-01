@@ -1,11 +1,12 @@
 import type { IUserService } from "@/business/interfaces/user.service.interface";
-import type { AppRouteHandler } from "@/common/types";
+import { type AppRouteHandler, TYPES } from "@/common/types";
+import { inject } from "inversify";
 import type { LoginRoute } from "../routes/auth.routes";
 
 export class AuthController {
   private userService: IUserService;
 
-  constructor(userService: IUserService) {
+  constructor(@inject(TYPES.IUserService) userService: IUserService) {
     this.userService = userService;
   }
 

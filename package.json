@@ -17,9 +17,11 @@
 		"hono": "^4.7.5",
 		"hono-pino": "^0.8.0",
 		"hono-rate-limiter": "^0.4.2",
+		"inversify": "^7.0.0-alpha.5",
 		"pg": "^8.14.1",
 		"pino": "^9.6.0",
 		"redis": "^4.7.0",
+		"reflect-metadata": "^0.2.2",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {

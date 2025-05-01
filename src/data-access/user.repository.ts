@@ -1,6 +1,8 @@
 import { UserNotFoundError } from "@/common/errors/user-not-found";
+import { TYPES } from "@/common/types";
 import { User } from "@/domain/entities/user";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
+import { inject } from "inversify";
 import type { IUserRepository } from "./interfaces/user.repository.interface";
 import type {
   ICreateUserQuery,
@@ -11,7 +13,7 @@ import type {
 export class UserRepository implements IUserRepository {
   db: IDatabaseConnection;
 
-  constructor(db: IDatabaseConnection) {
+  constructor(@inject(TYPES.IDatabaseConnection) db: IDatabaseConnection) {
     this.db = db;
   }
 

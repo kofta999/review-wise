@@ -1,7 +1,9 @@
 import env from "@/env";
+import { injectable } from "inversify";
 import { type RedisClientType, createClient } from "redis";
 import type { ICacheService } from "./interfaces/cache.service.interface";
 
+@injectable()
 export class RedisCacheService implements ICacheService {
   private client: RedisClientType;
   private DEFAULT_TTL_SECONDS = 300 as const;
@@ -34,7 +36,7 @@ export class RedisCacheService implements ICacheService {
 
   async delByPattern(pattern: string): Promise<void> {
     const keys = await this.client.KEYS(pattern);
-    console.log(keys)
+    console.log(keys);
 
     return void Promise.all(keys.map((k) => this.client.DEL(k)));
   }

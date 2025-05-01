@@ -1,6 +1,7 @@
-import type { Rating } from "@/common/types";
+import { type Rating, TYPES } from "@/common/types";
 import { Review } from "@/domain/entities/review";
 import { type IDatabaseConnection, sql } from "@pgtyped/runtime";
+import { inject, injectable } from "inversify";
 import type { IReviewRepository } from "./interfaces/review.repository.interface";
 import type {
   ICreateReviewQuery,
@@ -10,10 +11,11 @@ import type {
   IRemoveReviewQuery,
 } from "./types/review.repository.types";
 
+@injectable()
 export class ReviewRepository implements IReviewRepository {
   db: IDatabaseConnection;
 
-  constructor(db: IDatabaseConnection) {
+  constructor(@inject(TYPES.IDatabaseConnection) db: IDatabaseConnection) {
     this.db = db;
   }
 

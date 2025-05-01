@@ -12,9 +12,11 @@
         "hono": "^4.7.5",
         "hono-pino": "^0.8.0",
         "hono-rate-limiter": "^0.4.2",
+        "inversify": "^7.0.0-alpha.5",
         "pg": "^8.14.1",
         "pino": "^9.6.0",
         "redis": "^4.7.0",
+        "reflect-metadata": "^0.2.2",
         "zod": "^3.24.2",
       },
       "devDependencies": {
@@ -34,6 +36,16 @@
     "@hono/zod-openapi": ["@hono/zod-openapi@0.19.2", "", { "dependencies": { "@asteasolutions/zod-to-openapi": "^7.1.0", "@hono/zod-validator": "^0.4.1" }, "peerDependencies": { "hono": ">=4.3.6", "zod": "3.*" } }, "sha512-lkFa6wdQVgY7d7/m++Ixr3hvKCF5Y+zjTIPM37fex5ylCfX53A/W28gZRDuFZx3aR+noKob7lHfwdk9dURLzxw=="],
 
     "@hono/zod-validator": ["@hono/zod-validator@0.4.3", "", { "peerDependencies": { "hono": ">=3.9.0", "zod": "^3.19.1" } }, "sha512-xIgMYXDyJ4Hj6ekm9T9Y27s080Nl9NXHcJkOvkXPhubOLj8hZkOL8pDnnXfvCf5xEE8Q4oMFenQUZZREUY2gqQ=="],
+
+    "@inversifyjs/common": ["@inversifyjs/common@1.5.0", "", {}, "sha512-Qj5BELk11AfI2rgZEAaLPmOftmQRLLmoCXgAjmaF0IngQN5vHomVT5ML7DZ3+CA5fgGcEVMcGbUDAun+Rz+oNg=="],
+
+    "@inversifyjs/container": ["@inversifyjs/container@1.5.2", "", { "dependencies": { "@inversifyjs/common": "1.5.0", "@inversifyjs/core": "4.0.0", "@inversifyjs/reflect-metadata-utils": "1.1.0" }, "peerDependencies": { "reflect-metadata": "~0.2.2" } }, "sha512-z0h5iwzA/Gv/1K1ZFHj4VAXpyShOez61g4vWMaWpY4gKidsIbnn01ArRbKbsTKzwW63DniAGMhtnUO+y3htcpQ=="],
+
+    "@inversifyjs/core": ["@inversifyjs/core@4.0.0", "", { "dependencies": { "@inversifyjs/common": "1.5.0", "@inversifyjs/prototype-utils": "0.1.0", "@inversifyjs/reflect-metadata-utils": "1.1.0" } }, "sha512-uNK3aFEAn5mnQ1TbPqDDG/4BMNGPZ8Jb+cDW2ualjNCiMqtIDWP2gBQf0zahxSbZnc5iVrkk7ftjX3Raze8BLQ=="],
+
+    "@inversifyjs/prototype-utils": ["@inversifyjs/prototype-utils@0.1.0", "", { "dependencies": { "@inversifyjs/common": "1.5.0" } }, "sha512-lNz1yyajMRDXBHLvJsYYX81FcmeD15e5Qz1zAZ/3zeYTl+u7ZF/GxNRKJzNOloeMPMtuR8BnvzHA1SZxjR+J9w=="],
+
+    "@inversifyjs/reflect-metadata-utils": ["@inversifyjs/reflect-metadata-utils@1.1.0", "", { "peerDependencies": { "reflect-metadata": "0.2.2" } }, "sha512-jmuAuC3eL1GnFAYfJGJOMKRDL9q1mgzOyrban6zxfM8Yg1FUHsj25h27bW2G7p8X1Amvhg3MLkaOuogszkrofA=="],
 
     "@isaacs/cliui": ["@isaacs/cliui@8.0.2", "", { "dependencies": { "string-width": "^5.1.2", "string-width-cjs": "npm:string-width@^4.2.0", "strip-ansi": "^7.0.1", "strip-ansi-cjs": "npm:strip-ansi@^6.0.1", "wrap-ansi": "^8.1.0", "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0" } }, "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA=="],
 
@@ -231,6 +243,8 @@
 
     "ignore": ["ignore@5.3.2", "", {}, "sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g=="],
 
+    "inversify": ["inversify@7.0.0-alpha.5", "", { "dependencies": { "@inversifyjs/common": "1.5.0", "@inversifyjs/container": "1.5.2", "@inversifyjs/core": "4.0.0" }, "peerDependencies": { "reflect-metadata": "~0.2.2" } }, "sha512-fl09CyoTZXUc26m0GK65Cxx8B3MNjVb2vhdD/o03Vn9yXGFiQuRInvc3WC64j4QZl2UtRD9kK3Spk1junADT8g=="],
+
     "io-ts": ["io-ts@2.2.22", "", { "peerDependencies": { "fp-ts": "^2.5.0" } }, "sha512-FHCCztTkHoV9mdBsHpocLpdTAfh956ZQcIkWQxxS0U5HT53vtrcuYdQneEJKH6xILaLNzXVl2Cvwtoy8XNN0AA=="],
 
     "io-ts-reporters": ["io-ts-reporters@2.0.1", "", { "dependencies": { "@scarf/scarf": "^1.1.1" }, "peerDependencies": { "fp-ts": "^2.10.5", "io-ts": "^2.2.16" } }, "sha512-RVpLstYBsmTGgCW9wJ5KVyN/eRnRUDp87Flt4D1O3aJ7oAnd8csq8aXuu7ZeNK8qEDKmjUl9oUuzfwikaNAMKQ=="],
@@ -354,6 +368,8 @@
     "real-require": ["real-require@0.2.0", "", {}, "sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg=="],
 
     "redis": ["redis@4.7.0", "", { "dependencies": { "@redis/bloom": "1.2.0", "@redis/client": "1.6.0", "@redis/graph": "1.1.1", "@redis/json": "1.0.7", "@redis/search": "1.2.0", "@redis/time-series": "1.1.0" } }, "sha512-zvmkHEAdGMn+hMRXuMBtu4Vo5P6rHQjLoHftu+lBqq8ZTA3RCVC/WzD790bkKKiNFp7d5/9PcSD19fJyyRvOdQ=="],
+
+    "reflect-metadata": ["reflect-metadata@0.2.2", "", {}, "sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q=="],
 
     "require-directory": ["require-directory@2.1.1", "", {}, "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="],
 

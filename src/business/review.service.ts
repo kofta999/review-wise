@@ -1,20 +1,23 @@
 import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { ReviewBusinessDTO } from "@/common/dtos/review-business.dto";
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
+import { TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
 import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
 import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
 import { Review } from "@/domain/entities/review";
+import { inject, injectable } from "inversify";
 import type { IReviewService } from "./interfaces/review.service.interface";
 
+@injectable()
 export class ReviewService implements IReviewService {
   private reviewRepository: IReviewRepository;
   private businessRepository: IBusinessRepository;
   private logger = Logger.getLogger();
 
   constructor(
-    reviewRepository: IReviewRepository,
-    businessRepository: IBusinessRepository,
+    @inject(TYPES.IReviewRepository) reviewRepository: IReviewRepository,
+    @inject(TYPES.IBusinessRepository) businessRepository: IBusinessRepository,
   ) {
     this.reviewRepository = reviewRepository;
     this.businessRepository = businessRepository;

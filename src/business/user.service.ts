@@ -2,13 +2,16 @@ import type { LoginUserDTO } from "@/common/dtos/login-user.dto";
 import { InvalidCredentialsError } from "@/common/errors/invalid-credentials";
 import { ResourceAlreadyExists } from "@/common/errors/resource-already-exists";
 import { UserNotFoundError } from "@/common/errors/user-not-found";
+import { TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
 import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
 import { User } from "@/domain/entities/user";
+import { inject, injectable } from "inversify";
 import type { IJwtService } from "./interfaces/jwt.service.interface";
 import type { IPasswordService } from "./interfaces/password.service.interface";
 import type { IUserService } from "./interfaces/user.service.interface";
 
+@injectable()
 export class UserService implements IUserService {
   private userRepository: IUserRepository;
   private passwordService: IPasswordService;
@@ -16,9 +19,9 @@ export class UserService implements IUserService {
   private logger = Logger.getLogger();
 
   constructor(
-    userRepository: IUserRepository,
-    passwordService: IPasswordService,
-    jwtService: IJwtService,
+    @inject(TYPES.IUserRepository) userRepository: IUserRepository,
+    @inject(TYPES.IPasswordService) passwordService: IPasswordService,
+    @inject(TYPES.IJwtService) jwtService: IJwtService,
   ) {
     this.userRepository = userRepository;
     this.passwordService = passwordService;

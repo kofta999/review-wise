@@ -1,6 +1,7 @@
 import type { IBusinessService } from "@/business/interfaces/business.service.interface";
 import type { IReviewService } from "@/business/interfaces/review.service.interface";
-import type { AppRouteHandler } from "@/common/types";
+import { type AppRouteHandler, TYPES } from "@/common/types";
+import { inject } from "inversify";
 import type {
   DeleteBusinessRoute,
   DeleteReviewRoute,
@@ -11,8 +12,8 @@ export class AdminController {
   private reviewService: IReviewService;
 
   constructor(
-    businessService: IBusinessService,
-    reviewService: IReviewService,
+    @inject(TYPES.IBusinessService) businessService: IBusinessService,
+    @inject(TYPES.IReviewService) reviewService: IReviewService,
   ) {
     this.businessService = businessService;
     this.reviewService = reviewService;

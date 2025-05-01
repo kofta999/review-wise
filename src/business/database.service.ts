@@ -1,7 +1,7 @@
 import env from "@/env";
 import type { IDatabaseConnection } from "@pgtyped/runtime";
 import { injectable } from "inversify";
-import * as pg from "pg";
+import pg from "pg";
 
 @injectable()
 export class DatabaseService extends pg.Pool implements IDatabaseConnection {

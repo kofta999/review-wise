@@ -3,7 +3,7 @@ import { Business } from "@/core/domain/entities/business";
 import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
 import { sql } from "@pgtyped/runtime";
 import { inject, injectable } from "inversify";
-import type { PostgresDataSource } from "../data-sources/postgres/postgres.data-source";
+import type { IPostgresDataSource } from "../data-sources/postgres/postgres.data-source";
 import type {
 	ICreateBusinessQuery,
 	IExistsQuery,
@@ -13,9 +13,9 @@ import type {
 
 @injectable()
 export class BusinessRepositoryAdapter implements BusinessRepositoryPort {
-	db: PostgresDataSource;
+	db: IPostgresDataSource;
 
-	constructor(@inject(TYPES.PostgresDataSource) db: PostgresDataSource) {
+	constructor(@inject(TYPES.PostgresDataSource) db: IPostgresDataSource) {
 		this.db = db;
 	}
 

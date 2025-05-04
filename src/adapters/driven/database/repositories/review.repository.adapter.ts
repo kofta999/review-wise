@@ -3,7 +3,7 @@ import { Review } from "@/core/domain/entities/review";
 import type { ReviewRepositoryPort } from "@/ports/output/repositories/review.repository.port";
 import { sql } from "@pgtyped/runtime";
 import { inject, injectable } from "inversify";
-import type { PostgresDataSource } from "../data-sources/postgres/postgres.data-source";
+import type { IPostgresDataSource } from "../data-sources/postgres/postgres.data-source";
 import type {
 	ICreateReviewQuery,
 	IGetCountForBusinessQuery,
@@ -14,9 +14,9 @@ import type {
 
 @injectable()
 export class ReviewRepositoryAdapter implements ReviewRepositoryPort {
-	db: PostgresDataSource;
+	db: IPostgresDataSource;
 
-	constructor(@inject(TYPES.PostgresDataSource) db: PostgresDataSource) {
+	constructor(@inject(TYPES.PostgresDataSource) db: IPostgresDataSource) {
 		this.db = db;
 	}
 

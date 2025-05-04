@@ -3,8 +3,12 @@ import type { IDatabaseConnection } from "@pgtyped/runtime";
 import { injectable } from "inversify";
 import pg from "pg";
 
+export type IPostgresDataSource = IDatabaseConnection;
+
 @injectable()
-export class PostgresDataSource extends pg.Pool implements IDatabaseConnection {
+export class PostgresDataSource implements IDatabaseConnection {
+	private readonly pool: pg.Pool;
+
 	constructor() {
 		let config: pg.PoolConfig;
 
@@ -26,6 +30,14 @@ export class PostgresDataSource extends pg.Pool implements IDatabaseConnection {
 			};
 		}
 
-		super(config);
+		this.pool = new pg.Pool(config);
+	}
+
+	query(
+		query: string,
+		bindings: unknown[],
+	): Promise<{ rows: unknown[]; rowCount: number }> {
+		// @ts-ignore
+		return this.pool.query(query, bindings);
 	}
 }

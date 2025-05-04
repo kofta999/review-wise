@@ -3,7 +3,7 @@ import { User } from "@/core/domain/entities/user";
 import type { UserRepositoryPort } from "@/ports/output/repositories/user.repository.port";
 import { sql } from "@pgtyped/runtime";
 import { inject } from "inversify";
-import type { PostgresDataSource } from "../data-sources/postgres/postgres.data-source";
+import type { IPostgresDataSource } from "../data-sources/postgres/postgres.data-source";
 import type {
 	ICreateUserQuery,
 	IGetUserByEmailQuery,
@@ -11,9 +11,9 @@ import type {
 } from "../data-sources/postgres/types/user.repository.types";
 
 export class UserRepositoryAdapter implements UserRepositoryPort {
-	db: PostgresDataSource;
+	db: IPostgresDataSource;
 
-	constructor(@inject(TYPES.PostgresDataSource) db: PostgresDataSource) {
+	constructor(@inject(TYPES.PostgresDataSource) db: IPostgresDataSource) {
 		this.db = db;
 	}
 

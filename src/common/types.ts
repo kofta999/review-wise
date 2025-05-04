@@ -1,20 +1,20 @@
-import type { userrole } from "@/data-access/types/user.repository.types";
+import type { userrole } from "@/adapters/driven/database/data-sources/postgres/types/user.repository.types";
 import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import type { Env } from "hono";
 import type { PinoLogger } from "hono-pino";
 
 export interface AppBindings extends Env {
-  Variables: {
-    logger: PinoLogger;
-    user: { id: string; email: string; role: UserRole };
-  };
+	Variables: {
+		logger: PinoLogger;
+		user: { id: string; email: string; role: UserRole };
+	};
 }
 
 export type AppOpenAPI = OpenAPIHono<AppBindings>;
 
 export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
-  R,
-  AppBindings
+	R,
+	AppBindings
 >;
 
 export type Rating = number;
@@ -22,19 +22,22 @@ export type Rating = number;
 export type UserRole = userrole;
 
 export const TYPES = {
-  // Repositories
-  IBusinessRepository: Symbol.for("IBusinessRepository"),
-  IReviewRepository: Symbol.for("IReviewRepository"),
-  IUserRepository: Symbol.for("IUserRepository"),
-  // Services
-  IBusinessService: Symbol.for("IBusinessService"),
-  IReviewService: Symbol.for("IReviewService"),
-  IUserService: Symbol.for("IUserService"),
-  ICacheService: Symbol.for("ICacheService"),
-  IJwtService: Symbol.for("IJwtService"),
-  IPasswordService: Symbol.for("IPasswordService"),
-  IDatabaseConnection: Symbol.for("IDatabaseConnection"),
+	// Input Ports
+	BusinessApiPort: Symbol.for("BusinessApiPort"),
+	ReviewApiPort: Symbol.for("ReviewApiPort"),
+	UserApiPort: Symbol.for("UserApiPort"),
 
-  // Constants
-  JWT_SECRET: Symbol.for("JWT_SECRET"),
+	// Output Ports
+	BusinessRepositoryPort: Symbol.for("BusinessRepositoryPort"),
+	ReviewRepositoryPort: Symbol.for("ReviewRepositoryPort"),
+	UserRepositoryPort: Symbol.for("UserRepositoryPort"),
+	CachePort: Symbol.for("CachePort"),
+	JwtPort: Symbol.for("JwtPort"),
+	PasswordPort: Symbol.for("PasswordPort"),
+
+	// Data Sources
+	PostgresDataSource: Symbol.for("PostgresDataSource"),
+
+	// Constants
+	JWT_SECRET: Symbol.for("JWT_SECRET"),
 };

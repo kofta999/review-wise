@@ -1,7 +1,7 @@
 import { type Mock, mock } from "bun:test";
-import type { IJwtService } from "@/business/interfaces/jwt.service.interface";
+import type { JwtPort } from "@/ports/output/security/jwt.port";
 
-export interface MockJwtService extends IJwtService {
+export interface MockJwtService extends JwtPort {
 	sign: Mock<(payload: unknown) => Promise<string>>;
 	verify: Mock<(token: string) => Promise<unknown>>;
 }

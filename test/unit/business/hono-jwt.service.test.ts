@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, jest, mock, spyOn } from "bun:test";
-import { HonoJwtService } from "@/business/hono-jwt.service";
+import { HonoJwtAdapter } from "@/adapters/driven/security/hono-jwt.adapter";
 import { sign, verify } from "hono/jwt";
 
 // Mock Hono JWT functions
@@ -8,12 +8,12 @@ mock.module("hono/jwt", () => ({
 	verify: jest.fn(),
 }));
 
-describe("HonoJwtService", () => {
+describe("HonoJwtAdapter", () => {
 	const secret = "test-secret";
-	let jwtService: HonoJwtService<{ userId: number }>;
+	let jwtService: HonoJwtAdapter<{ userId: number }>;
 
 	beforeEach(() => {
-		jwtService = new HonoJwtService<{ userId: number }>(secret);
+		jwtService = new HonoJwtAdapter<{ userId: number }>(secret);
 		jest.clearAllMocks();
 	});
 

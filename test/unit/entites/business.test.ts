@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import type { Rating } from "@/common/types";
-import { Business } from "@/domain/entities/business";
+import { Business } from "@/core/domain/entities/business";
 
 describe("Business Entity", () => {
 	describe("constructor", () => {

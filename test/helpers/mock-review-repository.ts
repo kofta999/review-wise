@@ -1,9 +1,9 @@
 import { type Mock, mock } from "bun:test";
 import type { Rating } from "@/common/types";
-import type { IReviewRepository } from "@/data-access/interfaces/review.repository.interface";
-import type { Review } from "@/domain/entities/review";
+import type { Review } from "@/core/domain/entities/review";
+import type { ReviewRepositoryPort } from "@/ports/output/repositories/review.repository.port";
 
-export interface MockReviewRepository extends IReviewRepository {
+export interface MockReviewRepository extends ReviewRepositoryPort {
 	create: Mock<(review: Review) => Promise<number>>;
 	remove: Mock<(reviewId: number) => Promise<void>>;
 	getReviewsForBusiness: Mock<(businessId: number) => Promise<Review<never>[]>>;

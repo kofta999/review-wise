@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import type { IUserService } from "@/business/interfaces/user.service.interface";
-import { UserService } from "@/business/user.service";
 import { InvalidCredentialsError } from "@/common/errors/invalid-credentials";
 import { ResourceAlreadyExists } from "@/common/errors/resource-already-exists";
-import { User } from "@/domain/entities/user";
+import { UserService } from "@/core/application/services/user.service";
+import { User } from "@/core/domain/entities/user";
+import type { UserApiPort } from "@/ports/input/user";
 import {
 	type MockJwtService,
 	createMockJwtService,
@@ -22,7 +22,7 @@ describe("User service", () => {
 	let mockPasswordService: MockPasswordService;
 	let mockJwtService: MockJwtService;
 
-	let service: IUserService;
+	let service: UserApiPort;
 
 	beforeEach(() => {
 		mockUserRepo = createMockUserRepository();

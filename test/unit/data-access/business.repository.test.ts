@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
+import { BusinessRepositoryAdapter } from "@/adapters/driven/database/repositories/business.repository.adapter";
 import { BusinessNotFoundError } from "@/common/errors/business-not-found";
-import { BusinessRepository } from "@/data-access/business.repository";
-import { Business } from "@/domain/entities/business";
+import { Business } from "@/core/domain/entities/business";
+import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
 import {
 	type MockDatabaseConnection,
 	createMockDatabaseConnection,
@@ -9,11 +10,11 @@ import {
 
 describe("Business repository", () => {
 	let mockDb: MockDatabaseConnection;
-	let repo: BusinessRepository;
+	let repo: BusinessRepositoryPort;
 
 	beforeEach(() => {
 		mockDb = createMockDatabaseConnection();
-		repo = new BusinessRepository(mockDb);
+		repo = new BusinessRepositoryAdapter(mockDb);
 	});
 
 	afterEach(() => {
@@ -114,10 +115,11 @@ describe("Business repository", () => {
 
 			const business = await repo.getById(1);
 
+			expect(business).not.toBeNull();
 			expect(business).toBeInstanceOf(Business);
-			expect(business.businessId).toBe(mockBusinessData.businessId);
-			expect(business.name).toBe(mockBusinessData.name);
-			expect(business.description).toBe(mockBusinessData.description);
+			expect(business?.businessId).toBe(mockBusinessData.businessId);
+			expect(business?.name).toBe(mockBusinessData.name);
+			expect(business?.description).toBe(mockBusinessData.description);
 			expect(mockDb.query).toHaveBeenCalledTimes(1);
 			expect(mockDb.query).toHaveBeenCalledWith(
 				expect.stringContaining("select"),
@@ -125,13 +127,13 @@ describe("Business repository", () => {
 			);
 		});
 
-		it("Should throw error if business is not found", async () => {
+		it("Should return null if business is not found", async () => {
 			mockDb.query.mockResolvedValueOnce({
 				rows: [], // Empty result
 				rowCount: 0,
 			});
 
-			expect(repo.getById(999)).rejects.toThrow(BusinessNotFoundError);
+			expect(repo.getById(999)).resolves.toBeNull();
 			expect(mockDb.query).toHaveBeenCalledTimes(1);
 		});
 

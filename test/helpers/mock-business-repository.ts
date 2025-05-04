@@ -1,8 +1,8 @@
 import { type Mock, mock } from "bun:test";
-import type { IBusinessRepository } from "@/data-access/interfaces/business.repository.interface";
-import type { Business } from "@/domain/entities/business";
+import type { Business } from "@/core/domain/entities/business";
+import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
 
-export interface MockBusinessRepository extends IBusinessRepository {
+export interface MockBusinessRepository extends BusinessRepositoryPort {
 	exists: Mock<(businessId: number) => Promise<boolean>>;
 	create: Mock<(business: Business) => Promise<number>>;
 	remove: Mock<(businessId: number) => Promise<void>>;

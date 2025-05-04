@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import type { IReviewService } from "@/business/interfaces/review.service.interface";
-import { ReviewService } from "@/business/review.service";
+import { ReviewService } from "@/core/application/services/review.service";
+import type { ReviewApiPort } from "@/ports/input/review";
 import {
 	type MockBusinessRepository,
 	createMockBusinessRepository,
@@ -13,7 +13,7 @@ import {
 describe("Review service", () => {
 	let mockReviewRepo: MockReviewRepository;
 	let mockBusinessRepo: MockBusinessRepository;
-	let service: IReviewService;
+	let service: ReviewApiPort;
 
 	beforeEach(() => {
 		mockReviewRepo = createMockReviewRepository();
@@ -266,14 +266,14 @@ describe("Review service", () => {
 		it("Should remove a review for a reviewId", async () => {
 			mockReviewRepo.remove.mockResolvedValueOnce();
 
-			expect(service.adminRemoveReview(1)).resolves;
+			expect(service.removeReview(1)).resolves;
 			expect(mockReviewRepo.remove).toHaveBeenCalledTimes(1);
 		});
 
 		it("Should handle error cases from review repository", async () => {
 			mockReviewRepo.remove.mockRejectedValueOnce(new Error("database error"));
 
-			expect(service.adminRemoveReview(1)).rejects.toThrow("database error");
+			expect(service.removeReview(1)).rejects.toThrow("database error");
 			expect(mockReviewRepo.remove).toHaveBeenCalledTimes(1);
 		});
 	});

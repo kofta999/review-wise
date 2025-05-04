@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import type { IUserRepository } from "@/data-access/interfaces/user.repository.interface";
-import { UserRepository } from "@/data-access/user.repository";
-import { User } from "@/domain/entities/user";
+import { UserRepositoryAdapter } from "@/adapters/driven/database/repositories/user.repository.adapter";
+import { User } from "@/core/domain/entities/user";
+import type { UserRepositoryPort } from "@/ports/output/repositories/user.repository.port";
 import {
 	type MockDatabaseConnection,
 	createMockDatabaseConnection,
@@ -9,11 +9,11 @@ import {
 
 describe("User repository", () => {
 	let mockDb: MockDatabaseConnection;
-	let repo: IUserRepository;
+	let repo: UserRepositoryPort;
 
 	beforeEach(() => {
 		mockDb = createMockDatabaseConnection();
-		repo = new UserRepository(mockDb);
+		repo = new UserRepositoryAdapter(mockDb);
 	});
 
 	afterEach(() => {

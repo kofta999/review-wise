@@ -7,9 +7,9 @@ import {
 	jest,
 	spyOn,
 } from "bun:test";
-import { BusinessService } from "@/business/business.service";
-import type { IBusinessService } from "@/business/interfaces/business.service.interface";
-import { Business } from "@/domain/entities/business";
+import { BusinessService } from "@/core/application/services/business.service";
+import { Business } from "@/core/domain/entities/business";
+import type { BusinessApiPort } from "@/ports/input/business";
 import {
 	type MockBusinessRepository,
 	createMockBusinessRepository,
@@ -22,7 +22,7 @@ import {
 describe("Business service", () => {
 	let mockBusinessRepo: MockBusinessRepository;
 	let mockReviewRepo: MockReviewRepository;
-	let service: IBusinessService;
+	let service: BusinessApiPort;
 
 	beforeEach(() => {
 		mockBusinessRepo = createMockBusinessRepository();
@@ -144,7 +144,7 @@ describe("Business service", () => {
 		it("Should remove a business for a businessId", async () => {
 			mockBusinessRepo.remove.mockResolvedValueOnce();
 
-			expect(service.adminRemoveBusiness(1)).resolves;
+			expect(service.removeBusiness(1)).resolves;
 			expect(mockBusinessRepo.remove).toHaveBeenCalledTimes(1);
 		});
 
@@ -153,7 +153,7 @@ describe("Business service", () => {
 				new Error("database error"),
 			);
 
-			expect(service.adminRemoveBusiness(1)).rejects.toThrow("database error");
+			expect(service.removeBusiness(1)).rejects.toThrow("database error");
 			expect(mockBusinessRepo.remove).toHaveBeenCalledTimes(1);
 		});
 	});

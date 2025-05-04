@@ -1,4 +1,3 @@
-import { UserNotFoundError } from "@/common/errors/user-not-found";
 import { TYPES } from "@/common/types";
 import { User } from "@/core/domain/entities/user";
 import type { UserRepositoryPort } from "@/ports/output/repositories/user.repository.port";

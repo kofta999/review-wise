@@ -1,4 +1,3 @@
-import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import { TYPES } from "@/common/types";
 import { Business } from "@/core/domain/entities/business";
 import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
@@ -50,7 +49,7 @@ export class BusinessRepositoryAdapter implements BusinessRepositoryPort {
 		await removeBusiness.run({ businessId }, this.db);
 	}
 
-	async getById(businessId: number): Promise<Business> {
+	async getById(businessId: number): Promise<Business | null> {
 		const getBusinessById = sql<IGetBusinessByIdQuery>`select
       business_id as "businessId", name, description, user_id as "userId"
       from business
@@ -59,7 +58,7 @@ export class BusinessRepositoryAdapter implements BusinessRepositoryPort {
 		const res = await getBusinessById.run({ businessId }, this.db);
 
 		if (res.length === 0) {
-			throw new BusinessNotFoundError(businessId);
+			return null;
 		}
 
 		return new Business({ ...res[0] });

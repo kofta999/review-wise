@@ -1,4 +1,5 @@
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
+import { BusinessNotFoundError } from "@/common/errors/business-not-found";
 import { TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
 import type { BusinessApiPort } from "@/ports/input/business";
@@ -39,6 +40,10 @@ export class BusinessService implements BusinessApiPort {
 			this.businessRepository.getById(businessId),
 			this.reviewRepository.getRatingsForBusiness(businessId),
 		]);
+
+		if (!business) {
+			throw new BusinessNotFoundError(businessId);
+		}
 
 		this.logger.info(`Retrieved details for business with ID ${businessId}`);
 

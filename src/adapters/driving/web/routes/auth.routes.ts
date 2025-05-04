@@ -7,21 +7,21 @@ import { z } from "zod";
 const tags = ["Authentication"];
 
 export const login = createRoute({
-  path: "/login",
-  method: "post",
-  tags,
-  summary: "Login",
-  request: {
-    body: jsonContent(LoginUserSchema, "Logging in user's data"),
-  },
-  responses: {
-    200: jsonContent(
-      z.object({
-        token: z.string(),
-      }),
-      "The JWT token",
-    ),
-  },
+	path: "/login",
+	method: "post",
+	tags,
+	summary: "Login",
+	request: {
+		body: jsonContent(LoginUserSchema, "Logging in user's data"),
+	},
+	responses: {
+		200: jsonContent(
+			z.object({
+				token: z.string(),
+			}),
+			"The JWT token",
+		),
+	},
 });
 
 export type LoginRoute = typeof login;

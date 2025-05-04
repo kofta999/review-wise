@@ -1,4 +1,4 @@
-import { BaseApiError } from "@/common/errors/base-error";
+import { BaseApiError } from "@/common/errors/base-api-error";
 import type { Context } from "hono";
 import { rateLimiter } from "hono-rate-limiter";
 

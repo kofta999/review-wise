@@ -1,36 +1,36 @@
 import type { Rating } from "@/common/types";
 
 export class Business {
-  businessId?: number;
-  userId: number;
-  name: string;
-  description: string;
+	businessId?: number;
+	userId: number;
+	name: string;
+	description: string;
 
-  constructor({
-    businessId,
-    name,
-    description,
-    userId,
-  }: Pick<Business, "businessId" | "name" | "description" | "userId">) {
-    this.businessId = businessId;
-    this.userId = userId;
-    this.name = name;
-    this.description = description;
-  }
+	constructor({
+		businessId,
+		name,
+		description,
+		userId,
+	}: Pick<Business, "businessId" | "name" | "description" | "userId">) {
+		this.businessId = businessId;
+		this.userId = userId;
+		this.name = name;
+		this.description = description;
+	}
 
-  calculateAverageRating(ratings: Rating[]): Rating {
-    if (!ratings || ratings.length === 0) return 0;
+	calculateAverageRating(ratings: Rating[]): Rating {
+		if (!ratings || ratings.length === 0) return 0;
 
-    const sum = ratings.reduce((prev, curr) => prev + curr, 0);
+		const sum = ratings.reduce((prev, curr) => prev + curr, 0);
 
-    return sum / ratings.length;
-  }
+		return sum / ratings.length;
+	}
 
-  generateSlug(): string {
-    return this.name.replace(" ", "-");
-  }
+	generateSlug(): string {
+		return this.name.replace(" ", "-");
+	}
 
-  exists(): boolean {
-    return !!this.businessId;
-  }
+	exists(): boolean {
+		return !!this.businessId;
+	}
 }

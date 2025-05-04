@@ -1,7 +1,7 @@
-import { BaseApiError } from "./base-error";
+import { BaseError } from "./base-error";
 
-export class UnauthorizedError extends BaseApiError {
-  constructor() {
-    super(401, "Unauthorized to perform this action");
-  }
+export class UnauthorizedError extends BaseError {
+	constructor() {
+		super("Unauthorized to perform this action");
+	}
 }

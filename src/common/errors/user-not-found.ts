@@ -1,12 +1,11 @@
-import { BaseApiError } from "./base-error";
+import { BaseError } from "./base-error";
 
-export class UserNotFoundError extends BaseApiError {
-  constructor(identifier?: number) {
-    super(
-      404,
-      typeof identifier === "number"
-        ? `User of ID ${identifier} is not found`
-        : "User not found",
-    );
-  }
+export class UserNotFoundError extends BaseError {
+	constructor(identifier?: number) {
+		super(
+			typeof identifier === "number"
+				? `User of ID ${identifier} is not found`
+				: "User not found",
+		);
+	}
 }

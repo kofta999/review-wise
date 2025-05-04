@@ -1,5 +1,12 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"formatter": {
+		"indentWidth": 2
+	},
+	"files": {
+		"include": ["src/**/*.ts", "test/**/*.ts"],
+		"ignore": ["**/*.repository.types.ts"]
+	},
 	"javascript": {
 		"parser": {
 			"unsafeParameterDecoratorsEnabled": true

@@ -1,7 +1,7 @@
 import { type AppRouteHandler, TYPES } from "@/common/types";
+import type { UserApiPort } from "@/ports/input/user";
 import { inject } from "inversify";
 import type { LoginRoute } from "../routes/auth.routes";
-import type { UserApiPort } from "@/ports/input/user";
 
 export class AuthController {
 	constructor(@inject(TYPES.UserApiPort) private userService: UserApiPort) {}

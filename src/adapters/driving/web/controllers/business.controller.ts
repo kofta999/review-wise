@@ -1,6 +1,6 @@
 import type { GetBusinessReviewsDTO } from "@/common/dtos/get-business-reviews.dto";
 import type { GetBusinessDTO } from "@/common/dtos/get-business.dto";
-import { BaseApiError } from "@/common/errors/base-error";
+import { BaseApiError } from "@/common/errors/base-api-error";
 import { type AppRouteHandler, TYPES } from "@/common/types";
 import { Logger } from "@/common/util/logger";
 import type { BusinessApiPort } from "@/ports/input/business";

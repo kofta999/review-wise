@@ -1,7 +1,7 @@
-import { BaseApiError } from "./base-error";
+import { BaseError } from "./base-error";
 
-export class BusinessNotFoundError extends BaseApiError {
-  constructor(businessId: number) {
-    super(404, `Business of ID ${businessId} is not found`);
-  }
+export class BusinessNotFoundError extends BaseError {
+	constructor(businessId: number) {
+		super(`Business of ID ${businessId} is not found`);
+	}
 }

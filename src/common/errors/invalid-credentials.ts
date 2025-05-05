@@ -1,7 +1,7 @@
-import { BaseApiError } from "./base-error";
+import { BaseError } from "./base-error";
 
-export class InvalidCredentialsError extends BaseApiError {
-  constructor() {
-    super(401, "Invalid credentials, double check your email or password");
-  }
+export class InvalidCredentialsError extends BaseError {
+	constructor() {
+		super("Invalid credentials, double check your email or password");
+	}
 }

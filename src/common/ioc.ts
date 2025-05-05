@@ -1,70 +1,69 @@
+import { RedisCacheAdapter } from "@/adapters/driven/cache/redis-cache.adapter";
+import { PostgresDataSource } from "@/adapters/driven/database/data-sources/postgres/postgres.data-source";
+import { BusinessRepositoryAdapter } from "@/adapters/driven/database/repositories/business/business.repository.adapter";
+import { ReviewRepositoryAdapter } from "@/adapters/driven/database/repositories/review/review.repository.adapter";
+import { UserRepositoryAdapter } from "@/adapters/driven/database/repositories/user/user.repository.adapter";
+import { BcryptPasswordAdapter } from "@/adapters/driven/security/bcrypt-password.adapter";
+import { HonoJwtAdapter } from "@/adapters/driven/security/hono-jwt.adapter";
+import { BusinessService } from "@/core/application/services/business.service";
+import { ReviewService } from "@/core/application/services/review.service";
+import { UserService } from "@/core/application/services/user.service";
 import env from "@/env";
-import type { IDatabaseConnection } from "@pgtyped/runtime";
+import type { BusinessApiPort } from "@/ports/input/business";
+import type { ReviewApiPort } from "@/ports/input/review";
+import type { UserApiPort } from "@/ports/input/user";
+import type { CachePort } from "@/ports/output/cache/cache.port";
+import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
+import type { ReviewRepositoryPort } from "@/ports/output/repositories/review.repository.port";
+import type { UserRepositoryPort } from "@/ports/output/repositories/user.repository.port";
+import type { JwtPort } from "@/ports/output/security/jwt.port";
+import type { PasswordPort } from "@/ports/output/security/password.port";
 import { Container } from "inversify";
-import { BcryptPasswordService } from "../business/bcrypt-password.service";
-import { BusinessService } from "../business/business.service";
-import { DatabaseService } from "../business/database.service";
-import { HonoJwtService } from "../business/hono-jwt.service";
-import type { IBusinessService } from "../business/interfaces/business.service.interface";
-import type { ICacheService } from "../business/interfaces/cache.service.interface";
-import type { IJwtService } from "../business/interfaces/jwt.service.interface";
-import type { IPasswordService } from "../business/interfaces/password.service.interface";
-import type { IReviewService } from "../business/interfaces/review.service.interface";
-import type { IUserService } from "../business/interfaces/user.service.interface";
-import { RedisCacheService } from "../business/redis-cache.service";
-import { ReviewService } from "../business/review.service";
-import { UserService } from "../business/user.service";
-import { BusinessRepository } from "../data-access/business.repository";
-import type { IBusinessRepository } from "../data-access/interfaces/business.repository.interface";
-import type { IReviewRepository } from "../data-access/interfaces/review.repository.interface";
-import type { IUserRepository } from "../data-access/interfaces/user.repository.interface";
-import { ReviewRepository } from "../data-access/review.repository";
-import { UserRepository } from "../data-access/user.repository";
 import { TYPES } from "./types";
 
 const mainContainer = new Container({ autobind: true });
 
 // Database connection
 mainContainer
-  .bind<IDatabaseConnection>(TYPES.IDatabaseConnection)
-  .to(DatabaseService)
-  .inSingletonScope();
+	.bind<PostgresDataSource>(TYPES.PostgresDataSource)
+	.to(PostgresDataSource)
+	.inSingletonScope();
 
 // Repositories
 mainContainer
-  .bind<IBusinessRepository>(TYPES.IBusinessRepository)
-  .to(BusinessRepository);
+	.bind<BusinessRepositoryPort>(TYPES.BusinessRepositoryPort)
+	.to(BusinessRepositoryAdapter);
 
 mainContainer
-  .bind<IReviewRepository>(TYPES.IReviewRepository)
-  .to(ReviewRepository);
+	.bind<ReviewRepositoryPort>(TYPES.ReviewRepositoryPort)
+	.to(ReviewRepositoryAdapter);
 
-mainContainer.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
+mainContainer
+	.bind<UserRepositoryPort>(TYPES.UserRepositoryPort)
+	.to(UserRepositoryAdapter);
 
 // Services
-mainContainer
-  .bind<IBusinessService>(TYPES.IBusinessService)
-  .to(BusinessService);
+mainContainer.bind<BusinessApiPort>(TYPES.BusinessApiPort).to(BusinessService);
 
-mainContainer.bind<IReviewService>(TYPES.IReviewService).to(ReviewService);
+mainContainer.bind<ReviewApiPort>(TYPES.ReviewApiPort).to(ReviewService);
 
-mainContainer.bind<IUserService>(TYPES.IUserService).to(UserService);
+mainContainer.bind<UserApiPort>(TYPES.UserApiPort).to(UserService);
 
 // Common services
 mainContainer
-  .bind<ICacheService>(TYPES.ICacheService)
-  .to(RedisCacheService)
-  .inSingletonScope();
+	.bind<CachePort>(TYPES.CachePort)
+	.to(RedisCacheAdapter)
+	.inSingletonScope();
 
 mainContainer
-  .bind<IJwtService>(TYPES.IJwtService)
-  .to(HonoJwtService)
-  .inSingletonScope();
+	.bind<JwtPort>(TYPES.JwtPort)
+	.to(HonoJwtAdapter)
+	.inSingletonScope();
 
 mainContainer
-  .bind<IPasswordService>(TYPES.IPasswordService)
-  .to(BcryptPasswordService)
-  .inSingletonScope();
+	.bind<PasswordPort>(TYPES.PasswordPort)
+	.to(BcryptPasswordAdapter)
+	.inSingletonScope();
 
 // Constants
 mainContainer.bind(TYPES.JWT_SECRET).toConstantValue(env.JWT_SECRET);

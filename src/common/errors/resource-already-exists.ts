@@ -1,7 +1,7 @@
-import { BaseApiError } from "./base-error";
+import { BaseError } from "./base-error";
 
-export class ResourceAlreadyExists extends BaseApiError {
-  constructor(type?: string) {
-    super(409, `${type ?? "Resource"} Already exists`);
-  }
+export class ResourceAlreadyExists extends BaseError {
+	constructor(type?: string) {
+		super(`${type ?? "Resource"} Already exists`);
+	}
 }

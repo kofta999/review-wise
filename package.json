@@ -1,34 +1,39 @@
 {
-	"name": "review-wise",
-	"type": "module",
-	"scripts": {
-		"dev": "bun ./devScript.js | pino-pretty",
-		"typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json",
-		"pgtyped": "bunx pgtyped -c pgtyped.cjs",
-		"build": "tsc && tsc-alias",
-		"start": "node ./dist/src/index.js"
-	},
-	"dependencies": {
-		"@hono/node-server": "^1.14.1",
-		"@hono/zod-openapi": "0.19.2",
-		"@pgtyped/runtime": "^2.4.2",
-		"@scalar/hono-api-reference": "^0.8.0",
-		"bcryptjs": "^3.0.2",
-		"hono": "^4.7.5",
-		"hono-pino": "^0.8.0",
-		"hono-rate-limiter": "^0.4.2",
-		"inversify": "^7.0.0-alpha.5",
-		"pg": "^8.14.1",
-		"pino": "^9.6.0",
-		"redis": "^4.7.0",
-		"reflect-metadata": "^0.2.2",
-		"zod": "^3.24.2"
-	},
-	"devDependencies": {
-		"@pgtyped/cli": "^2.4.3",
-		"@types/bun": "latest",
-		"@types/pg": "^8.11.11",
-		"pino-pretty": "^13.0.0",
-		"tsc-alias": "^1.8.15"
-	}
+  "name": "review-wise",
+  "type": "module",
+  "scripts": {
+    "dev": "bun ./devScript.js | pino-pretty",
+    "typecheck": "bunx tsc --skipLibCheck --noEmit --project tsconfig.json",
+    "pgtyped": "bunx pgtyped -c pgtyped.cjs",
+    "build": "tsc && tsc-alias",
+    "start": "node ./dist/src/index.js",
+    "lint": "biome check --write"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "@hono/zod-openapi": "0.19.2",
+    "@pgtyped/runtime": "^2.4.2",
+    "@scalar/hono-api-reference": "^0.8.0",
+    "bcryptjs": "^3.0.2",
+    "hono": "^4.7.5",
+    "hono-pino": "^0.8.0",
+    "hono-rate-limiter": "^0.4.2",
+    "inversify": "^7.0.0-alpha.5",
+    "pg": "^8.14.1",
+    "pino": "^9.6.0",
+    "redis": "^4.7.0",
+    "reflect-metadata": "^0.2.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@pgtyped/cli": "^2.4.3",
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.11",
+    "pino-pretty": "^13.0.0",
+    "tsc-alias": "^1.8.15"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }

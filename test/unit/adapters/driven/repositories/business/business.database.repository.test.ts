@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import { BusinessRepositoryAdapter } from "@/adapters/driven/database/repositories/business.repository.adapter";
-import { BusinessNotFoundError } from "@/common/errors/business-not-found";
+import { BusinessDatabaseRepository } from "@/adapters/driven/database/repositories/business/business.database.repository";
 import { Business } from "@/core/domain/entities/business";
 import type { BusinessRepositoryPort } from "@/ports/output/repositories/business.repository.port";
 import {
@@ -8,13 +7,13 @@ import {
 	createMockDatabaseConnection,
 } from "test/helpers/mock-db-connection";
 
-describe("Business repository", () => {
+describe("Business database repository", () => {
 	let mockDb: MockDatabaseConnection;
-	let repo: BusinessRepositoryPort;
+	let repo: BusinessDatabaseRepository;
 
 	beforeEach(() => {
 		mockDb = createMockDatabaseConnection();
-		repo = new BusinessRepositoryAdapter(mockDb);
+		repo = new BusinessDatabaseRepository(mockDb);
 	});
 
 	afterEach(() => {

@@ -7,20 +7,20 @@ import {
 	jest,
 	spyOn,
 } from "bun:test";
-import { ReviewRepositoryAdapter } from "@/adapters/driven/database/repositories/review.repository.adapter";
+import { ReviewDatabaseRepository } from "@/adapters/driven/database/repositories/review/review.database.repository";
 import { Review } from "@/core/domain/entities/review";
 import {
 	type MockDatabaseConnection,
 	createMockDatabaseConnection,
 } from "test/helpers/mock-db-connection";
 
-describe("Review repository", () => {
+describe("Review database repository", () => {
 	let mockDb: MockDatabaseConnection;
-	let repo: ReviewRepositoryAdapter;
+	let repo: ReviewDatabaseRepository;
 
 	beforeEach(() => {
 		mockDb = createMockDatabaseConnection();
-		repo = new ReviewRepositoryAdapter(mockDb);
+		repo = new ReviewDatabaseRepository(mockDb);
 		// biome-ignore lint/suspicious/noExplicitAny: Private property
 		spyOn(repo as any, "exists").mockResolvedValue(true);
 	});

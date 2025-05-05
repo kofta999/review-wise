@@ -1,19 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from "bun:test";
-import { UserRepositoryAdapter } from "@/adapters/driven/database/repositories/user.repository.adapter";
+import { UserDatabaseRepository } from "@/adapters/driven/database/repositories/user/user.database.repository";
 import { User } from "@/core/domain/entities/user";
-import type { UserRepositoryPort } from "@/ports/output/repositories/user.repository.port";
 import {
 	type MockDatabaseConnection,
 	createMockDatabaseConnection,
 } from "test/helpers/mock-db-connection";
 
-describe("User repository", () => {
+describe("User database repository", () => {
 	let mockDb: MockDatabaseConnection;
-	let repo: UserRepositoryPort;
+	let repo: UserDatabaseRepository;
 
 	beforeEach(() => {
 		mockDb = createMockDatabaseConnection();
-		repo = new UserRepositoryAdapter(mockDb);
+		repo = new UserDatabaseRepository(mockDb);
 	});
 
 	afterEach(() => {

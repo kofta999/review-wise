@@ -6,7 +6,7 @@ import { createRouter } from "@/common/util/create-router";
 import { AdminController } from "./adapters/driving/web/controllers/admin.controller";
 import { AuthController } from "./adapters/driving/web/controllers/auth.controller";
 import { BusinessController } from "./adapters/driving/web/controllers/business.controller";
-import { errorHandler } from "./adapters/driving/web/middleware/error-handler.middleware.";
+import { errorHandler } from "./adapters/driving/web/middleware/error-handler.middleware";
 import { loggerMiddleware } from "./adapters/driving/web/middleware/pino-logger.middleware";
 import { rateLimiterMiddleware } from "./adapters/driving/web/middleware/rate-limiter.middleware";
 import { mainContainer } from "./common/ioc";

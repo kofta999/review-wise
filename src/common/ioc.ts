@@ -1,8 +1,8 @@
 import { RedisCacheAdapter } from "@/adapters/driven/cache/redis-cache.adapter";
 import { PostgresDataSource } from "@/adapters/driven/database/data-sources/postgres/postgres.data-source";
-import { BusinessRepositoryAdapter } from "@/adapters/driven/database/repositories/business.repository.adapter";
-import { ReviewRepositoryAdapter } from "@/adapters/driven/database/repositories/review.repository.adapter";
-import { UserRepositoryAdapter } from "@/adapters/driven/database/repositories/user.repository.adapter";
+import { BusinessRepositoryAdapter } from "@/adapters/driven/database/repositories/business/business.repository.adapter";
+import { ReviewRepositoryAdapter } from "@/adapters/driven/database/repositories/review/review.repository.adapter";
+import { UserRepositoryAdapter } from "@/adapters/driven/database/repositories/user/user.repository.adapter";
 import { BcryptPasswordAdapter } from "@/adapters/driven/security/bcrypt-password.adapter";
 import { HonoJwtAdapter } from "@/adapters/driven/security/hono-jwt.adapter";
 import { BusinessService } from "@/core/application/services/business.service";
